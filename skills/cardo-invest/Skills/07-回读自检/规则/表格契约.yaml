@@ -1,0 +1,186 @@
+schema: cardo/invest-table-contract/v1
+version: 1
+extractedAt: "2026-10-22"
+producer: cardo-invest-spec/T3
+source:
+  templateAsset: skills/cardo-invest-spec/模板/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx
+  originalSha256: 395b0a47ab448eac21c1c52cdbe7014db24e68b22c001c34eb6839e2751d026a
+  reconReport: docs/专题/模板侦察.md
+units:
+  tableSlotCount: 6
+  keyPolicy: 按表位 ID 1–6 做键；表位 1=全部投资、表位 2=资本金
+templateDefects:
+  - id: TD-01
+    slot: 2
+    desc: 模板表 2 表头误写“计算结果（全部投资）”，实为资本金指标表
+    handling: 成品表头写规范写法“计算结果（资本金）”；模板缺陷写法只登记在 headerCompatible，不沿用；原始件不改
+  - id: TD-02
+    slot: 4
+    desc: 模板表 4 指标层矩阵含一行“备注：老旧小区不涉及预期内部收益率和投资回收期”
+    handling: 保留为 by_direction 规则（老旧小区方向），不作为普通数据行
+  - id: TD-03
+    slot: 4
+    desc: 模板表 4 组内子准则行首列标签与准则不对应（现状情况子准则/质量子准则/交付子准则/服务子准则，后三者与 投资经济/规划合规/风险可控 不匹配）
+    handling: 契约登记 templateSubCriterionLabel 保留原文；成品按 criterion 重新生成组标题与子准则行，不沿用错位标签
+  - id: TD-04
+    slot: 4
+    desc: 模板表 4 有 2 个空分隔行（第 8/24 行），31 行 = 4 组 29 行 + 2 空行
+    handling: rowComposition 显式登记；渲染时空行可省略或保留为空行，不填数据
+checks:
+  - id: TBL-CHK-1
+    desc: 表位 1–6 齐全（数量与 slot 一致）
+    severity: fail
+  - id: TBL-CHK-2
+    desc: 每个表位表头（列数与列名）与契约一致（表位 2 兼容模板缺陷写法）
+    severity: fail
+  - id: TBL-CHK-3
+    desc: 表位 1/2 数字与 财务测算.json#indicators 一致（成品展示容差：比率 0.04pp、金额 0.01 万元、期数 0.01 年；模板锚点容差另见财务口径）
+    severity: fail
+  - id: TBL-CHK-4
+    desc: 表位 3/4 判别矩阵对角=1、列和=各列合计、正互反 aij*aji=1（容差 0.01）
+    severity: fail
+  - id: TBL-CHK-5
+    desc: 表位 5 权重合计=1（容差 0.001）；表位 6 综合权重合计=1（容差 0.001）
+    severity: fail
+  - id: TBL-CHK-6
+    desc: AHP 缺失时表位 3–6 用显式默认权重，并标注“临时权重，待 AHP 插件输出替换”
+    severity: warn
+tableSlots:
+  - slot: 1
+    chapter: CH-08
+    section: CH-08
+    placement: 章末（财务评价章末）
+    rows: 4
+    cols: 4
+    header: [序号, 指标名称, 单位, 计算结果（全部投资）]
+    rowTemplate:
+      - no: 1
+        name: 财务内部收益率（税后）
+        unit: "%"
+        valueKey: firrAll
+        format: ratio
+      - no: 2
+        name: 财务净现值（税后）
+        unit: 万元
+        valueKey: fnpvAll
+        format: amount
+      - no: 3
+        name: 静态投资回收期（税后）
+        unit: 年
+        valueKey: ptAll
+        format: years
+    valueSource: 05_过程/投资决策/财务测算.json#indicators
+    missingPolicy: gap
+  - slot: 2
+    chapter: CH-08
+    section: CH-08
+    placement: 章末（财务评价章末）
+    rows: 4
+    cols: 4
+    header: [序号, 指标名称, 单位, 计算结果（资本金）]
+    headerCompatible:
+      - [序号, 指标名称, 单位, 计算结果（全部投资）]
+    headerRule: 成品写“计算结果（资本金）”；模板原文误写“计算结果（全部投资）”，属 TD-01，不得沿用
+    rowTemplate:
+      - no: 1
+        name: 财务内部收益率（税后）
+        unit: "%"
+        valueKey: firrEquity
+        format: ratio
+      - no: 2
+        name: 财务净现值（税后）
+        unit: 万元
+        valueKey: fnpvEquity
+        format: amount
+      - no: 3
+        name: 静态投资回收期（税后）
+        unit: 年
+        valueKey: ptEquity
+        format: years
+    valueSource: 05_过程/投资决策/财务测算.json#indicators
+    missingPolicy: gap
+  - slot: 3
+    chapter: CH-09
+    section: CH-09
+    placement: 章末（AHP 章末，9.3 之后）
+    rows: 6
+    cols: 5
+    header: [准则, 现状情况, 投资经济, 规划合规, 风险可控]
+    rowSpec:
+      - [matrix, criteria]
+      - [列和, true]
+    valueSource: 05_过程/投资决策/财务输入.json#ahpWeights.criteriaMatrix
+    missingPolicy: default_weight
+  - slot: 4
+    chapter: CH-09
+    section: CH-09
+    placement: 章末（AHP 章末，9.3 之后）
+    rows: 31
+    cols: 5
+    header: [指标层权重派生展示矩阵（4 组）, 子准则 1, 子准则 2, 子准则 3, 子准则 4]
+    rowComposition:
+      totalRows: 31
+      headerRow: 1
+      groupRows: 4
+      groupLayout: [组标题行, 子准则行, 4×4矩阵行, 列和行, （可选）备注行]
+      blankSeparatorRows: 2
+      blankSeparatorPositions: [8, 24]
+      note: 4 组行数 7/8/7/7 = 29 + 2 个空分隔行 = 31
+    groups:
+      - criterion: 现状情况
+        templateSubCriterionLabel: 现状情况子准则
+        indicators: [房屋设施老化程度, 安全风险等级, 现状建筑密度, 现状容积率]
+        rows: 7
+      - criterion: 投资经济
+        templateSubCriterionLabel: 质量子准则
+        indicators: [改造总成本, 预期内部收益率, 投资回收期, 资产增值潜力]
+        rows: 8
+        note: 老旧小区不涉及预期内部收益率和投资回收期
+        noteByDirection: 老旧小区项目
+      - criterion: 规划合规
+        templateSubCriterionLabel: 交付子准则
+        indicators: [城市规划符合度, 政策合规, 基础设施配套率, 生态环保标准]
+        rows: 7
+      - criterion: 风险可控
+        templateSubCriterionLabel: 服务子准则
+        indicators: [政策风险, 成本超支风险, 社会稳定风险, 工程延误风险]
+        rows: 7
+    valueSource: 05_过程/投资决策/财务输入.json#ahpWeights.indicatorWeights（派生矩阵）
+    missingPolicy: default_weight
+    headerPolicy: 第一行为合并的组标题占位；渲染时按 groups 逐组生成组标题行
+  - slot: 5
+    chapter: CH-09
+    section: CH-09
+    placement: 章末（AHP 章末，9.3 之后）
+    rows: 6
+    cols: 3
+    header: [准则, 行几何平均, 权重]
+    rowSpec:
+      - [criteria, 现状情况, 投资经济, 规划合规, 风险可控]
+      - [合计, true]
+    valueSource: 05_过程/投资决策/财务输入.json#ahpWeights.criteriaWeights
+    missingPolicy: default_weight
+  - slot: 6
+    chapter: CH-09
+    section: CH-09
+    placement: 章末（AHP 章末，9.3 之后）
+    rows: 18
+    cols: 5
+    header: [准则, 准则权重, 指标层, 子权重(4阶矩阵内), 综合权重]
+    rowSpec:
+      - [indicators, 4 准则 × 4 指标]
+      - [合计, true]
+    valueSource: 05_过程/投资决策/财务输入.json#ahpWeights.indicatorWeights
+    missingPolicy: default_weight
+tolerance:
+  ratio: 0.04
+  amountWan: 0.01
+  years: 0.01
+  matrixReciprocal: 0.01
+  weightSum: 0.001
+  note: 成品-vs-财务测算.json 的展示容差（表内两位小数）；模板锚点对账容差见财务口径 anchors.tolerance（0.5%/1 万元/0.5 年），两者不同勿混用
+rounding:
+  ratioDecimals: 2
+  amountDecimals: 2
+  yearDecimals: 2
+  weightDecimals: 4

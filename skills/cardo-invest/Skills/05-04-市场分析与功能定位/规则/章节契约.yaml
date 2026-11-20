@@ -1,0 +1,322 @@
+schema: cardo/invest-chapter-contract/v2
+version: 2
+extractedAt: '2026-10-22'
+updatedAt: '2026-10-23'
+producer: cardo-invest-spec/T3+T18
+source:
+  templateAsset: skills/cardo-invest-spec/assets/templates/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx
+  templateSha256: f8f97d8bcd317007d2d76e1871f319797fe7b8e297ee7a48365bb5dfafce7b10
+  originalSha256: 395b0a47ab448eac21c1c52cdbe7014db24e68b22c001c34eb6839e2751d026a
+  originalChapters: 10
+  originalHeadingCensus: 55 个标题 = H1×10 + H2×26 + H3×12 + H4×7
+  chapterRequirements: docs/模板逐章要求.md
+  chapterSkillConvention: docs/章节skill约定.md
+  note: 模板正文 34 处“数据来源”字样（28 标准 + 6 非标准）已全部转为 promptRules；成品 0 残留由全局断言保证
+units:
+  chapterCount: 10
+  tableSlotCount: 6
+  promptLineCount: 34
+  templateHeadingCount: 45
+  sectionNodeCount: 47
+  syntheticSectionCount: 2
+  tableIndexCount: 42
+  mandatoryTableCount: 35
+  optionalTableCount: 7
+  figureIndexCount: 12
+  mandatoryFigureCount: 8
+  conditionalFigureCount: 3
+  tableCountMin: 20
+  figureCountMin: 6
+  wordTotalMin: 21400
+  wordTotalFloor: 20000
+gates:
+  chapterScope: G-invest-2
+  promptLinePolicy: 提示行只作为取料规则，绝不出现在成品
+  writingScope: G-invest-7
+  writingPolicy: 语气/术语/禁用词/来源行/块级语法/题注只在 写作规范.yaml 定义，本契约只引用不复制
+writingProfile:
+  rulesFile: 写作规范.yaml
+  writingLib: scripts/writing.py
+  checker: scripts/check_report_v2.py
+  fragmentFormat: markdown + 块级 HTML 注释语法
+  fragmentPath: 05_过程/投资决策/分章/CH-XX.md
+  blockSyntaxRef: 写作规范.yaml#blockSyntax
+  contractRef: skills/cardo-invest-spec/规则/章节契约.yaml
+  chapterHeadingPolicy: 分章稿不写 H1（compose 生成）；小节标题
+  numbering:
+    table: 表 <章>-<章内出现序号>
+    figure: 图 <章>-<章内出现序号>
+    rule: 编号按成品出现顺序连续；章内不跳号、不重号
+  wordMinSemantics: wordMin = 该节自身正文中文字符数（不含下级小节/表格/来源行/标题）；章 wordMin = 各节之和
+  paragraphPlanSemantics: paragraphPlan 是有序段落意图清单，不是逐段模板；顺序可变通，段数不得少于 length-1
+  requiredQuestionsSemantics: 必答问题必须在小节正文里被明确回答；允许换句式，不允许漏答；答不出写（资料缺失：…）
+  acceptanceSemantics: acceptance 里的 id 指向 acceptanceCatalog；fail 级不过则该小节判 fail
+  optionalSemantics: optionalTables/optionalFigures 为材料充足时升级的选做项，不计入门槛
+  dataPolicy: 数字只读上游引擎 JSON；章节脚本禁止自行计算财务指标（财务口径.yaml 为唯一口径）
+  wordCountPolicy: count_cn_words() 统计中文汉字，去标题/表格/来源行/图块；实现见 scripts/writing.py
+globalAssertions:
+- id: CHK-INV-1
+  desc: 一级标题数量=10 且顺序与契约 chapters 一致
+  severity: fail
+- id: CHK-INV-2
+  desc: 表位 1–6 齐全且表头与表格契约一致
+  severity: fail
+- id: CHK-INV-3
+  desc: 成品不含“数据来源”提示行（0 残留），且契约 34 条 promptRules 每条已映射到 section
+  severity: fail
+- id: CHK-INV-4
+  desc: 成品不含占位符（双花括号/待补/TODO/XXX）
+  severity: fail
+- id: CHK-INV-5
+  desc: 成品与插件资产不含真实项目名（项目级扫描 0 命中）
+  severity: fail
+- id: CHK-INV-6
+  desc: 成品与插件文本不含盘符/UNC/用户目录绝对路径
+  severity: fail
+- id: CHK-INV-7
+  desc: 表位 1/2 指标数字/行名/单位与 财务测算.json 一致（成品展示容差 0.04pp/0.01 万元/0.01 年；锚点容差 0.5%/1 万元另见财务口径）
+  severity: fail
+- id: CHK-INV-8
+  desc: 每章有来源映射（sourceMap，≥10 章），断链 0（实现按 fail 校验，严于本 warn 级）
+  severity: warn
+chapters:
+- id: CH-04
+  number: 4
+  title: 市场分析与功能定位
+  level: 1
+  required: true
+  goal: 定位必须有三个来源（规划要求+现状问题+市场需求），业态必须能落到 8.1.3 收入项
+  audience:
+  - 城投
+  - 政府
+  - 评审
+  wordMin: 1800
+  templateParagraphs:
+  - 40
+  - 41
+  - 42
+  - 43
+  - 44
+  - 45
+  - 46
+  - 47
+  - 48
+  - 50
+  requiredQuestions:
+  - Q1：定位有依据且不与控规冲突吗
+  - Q2：业态占比合计 100% 且面积与 5.3 一致吗
+  - Q3：4.4 收入与 8.1.3 是否同数
+  - Q4：老旧小区方向不适用 4.1/4.4 时是否明确声明
+  paragraphPlan:
+  - P1 结论段（4.1）：片区供需缺口 X，本项目可承接 X
+  - P2 人口与消费、供给与缺口、竞争
+  - P3 功能定位（4.2）：一句定位 + 四条依据 + 规划符合性
+  - P4 业态（4.3）：组合、面积、对应收入项
+  - P5 客流与收入（4.4）：来源、测算、结构、不确定性
+  requiredTables:
+  - T4-1
+  - T4-3
+  - T4-4
+  optionalTables:
+  - T4-2
+  requiredFigures: []
+  optionalFigures:
+  - F4-1
+  acceptance:
+  - ACC-STRUCT
+  - ACC-WORD
+  - ACC-KEYQ
+  - ACC-PARAS
+  - ACC-TABLE
+  - ACC-SOURCE
+  - ACC-NUM
+  - ACC-TERM
+  - ACC-NOBAN
+  - ACC-STALE
+  - ACC-DIRECTION
+  antiPatterns:
+  - 空话：市场前景广阔、需求旺盛
+  - 编数：租金/客流/空置率无来源
+  - 跑题：老旧小区项目仍写商业市场分析
+  - 闭合：有业态无对应收入项（或反之）
+  - 口径：占比合计≠100%、面积超改造面积
+  sections:
+  - id: CH-04-01
+    number: '4.1'
+    title: 区域市场简述
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 区域市场简述
+    goal: 人口—供给—缺口—竞争四段说清需求承接能力，并声明方向适用性
+    audience:
+    - 城投
+    - 评审
+    wordMin: 600
+    requiredQuestions:
+    - Q1：周边人口与消费能力如何（常住或流动人口、人均可支配收入、消费支出，带年份）
+    - Q2：片区现有商业或文旅供给与缺口是什么（业态结构、空置率、租金水平）
+    - Q3：改造后客流与消费支撑是否充足（定量判断或分区判断）
+    - Q4：3 km 内竞争或替代项目情况（体量、业态、租金、客流）
+    - Q5：本项目方向是否适用本章（老旧小区方向不适用，需明确声明）
+    paragraphPlan:
+    - P1 结论：片区供需缺口为 X，本项目可承接 X
+    - P2 人口与消费
+    - P3 供给与缺口
+    - P4 竞争与支撑判断（含不适用声明）
+    requiredTables:
+    - T4-1
+    optionalTables:
+    - T4-2
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-SOURCE
+    - ACC-DIRECTION
+    source:
+      kind: project_file_or_web
+      from:
+      - 项目资料
+      - 网络资料
+      - 现状分析报告第二章
+      missing: gap
+  - id: CH-04-02
+    number: '4.2'
+    title: 项目总体功能定位
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 项目总体功能定位
+    goal: 一句可复述的定位 + 四条依据 + 规划符合性判断 + 对改造与业态的约束
+    audience:
+    - 政府
+    - 城投
+    wordMin: 400
+    requiredQuestions:
+    - Q1：一句话定位是什么（给谁、提供什么、差异化在哪）
+    - Q2：定位依据是什么（规划要求/现状问题/市场需求/资产条件，各一条）
+    - Q3：与上位规划是否冲突（用地性质、高度、风貌、保护要求）
+    - Q4：定位如何约束 5.3 改造内容与 4.3 业态
+    paragraphPlan:
+    - P1 一句定位结论
+    - P2 四条依据
+    - P3 规划符合性判断
+    - P4 对改造与业态的约束
+    requiredTables: []
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-SOURCE
+    source:
+      kind: slot
+      from: slots.functionalPosition
+      missing: gap
+  - id: CH-04-03
+    number: '4.3'
+    title: 业态规划方案
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 业态规划方案
+    goal: 业态组合与面积配置可落到收入项，占比合计 100%，并给负面清单
+    audience:
+    - 城投
+    - 评审
+    wordMin: 400
+    requiredQuestions:
+    - Q1：业态组合是什么（主导/配套/特色业态及占比）
+    - Q2：各业态面积或铺位数是多少，与 5.3 工程量、8.1.3 收入项如何一一对应
+    - Q3：招商与运营是否可行（主力店/品牌/租金承受力）
+    - Q4：不做什么业态（负面清单，防止低端业态回流）
+    paragraphPlan:
+    - P1 结论：主导 X%、配套 Y%、特色 Z%
+    - P2 主导业态
+    - P3 配套与特色业态
+    - P4 与收入项对应 + 负面清单
+    requiredTables:
+    - T4-3
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-SOURCE
+    - ACC-NUM
+    source:
+      kind: slot
+      from: slots.businessTypes
+      missing: gap
+  - id: CH-04-04
+    number: '4.4'
+    title: 客流与运营收入预判
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 客流与运营收入预判
+    goal: 客流来源与测算说清楚，收入结构与 8.1.3 同数同口径，并给不确定性对策
+    audience:
+    - 城投
+    - 评审
+    wordMin: 400
+    requiredQuestions:
+    - Q1：客流从哪来（常住/文旅/目的性）、规模多少、怎么测算
+    - Q2：收入来源有哪几项、首年收入多少、增长假设是什么
+    - Q3：收入预判与 8.1.3 是否同数同口径
+    - Q4：关键不确定性（客流、租金、出租率）如何应对
+    paragraphPlan:
+    - P1 结论：首年运营收入 X 万元，结构为…
+    - P2 客流来源与测算
+    - P3 收入结构（对应 8.1.3 各项）
+    - P4 不确定性与对策
+    requiredTables:
+    - T4-4
+    optionalTables: []
+    requiredFigures: []
+    optionalFigures:
+    - F4-1
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-SOURCE
+    - ACC-NUM
+    source:
+      kind: upstream_file
+      from: 财务测算.json#revenue + 现状分析报告#人口/客流段
+      locator: 5.2
+      missing: gap
+      note: Lead D-02：R-15 实为 5.2，本节取料另行声明（supplementalRules S-01）
+promptRules:
+- id: R-12
+  paragraph: 43
+  section: CH-04-01
+  text: （数据来源：网络资料、项目资料、《现状分析报告》第二章内容）
+  kind: project_file_or_web
+  from:
+  - 网络资料
+  - 项目资料
+  - 现状分析报告第二章
+  missing: gap
+- id: R-13
+  paragraph: 45
+  section: CH-04-02
+  text: 数据来源：结合现状分析手动输入总体功能定位。
+  kind: slot
+  from: slots.functionalPosition
+  missing: gap
+- id: R-14
+  paragraph: 47
+  section: CH-04-03
+  text: 数据来源：结合现状问题手动输入业态规划方案。
+  kind: slot
+  from: slots.businessTypes
+  missing: gap

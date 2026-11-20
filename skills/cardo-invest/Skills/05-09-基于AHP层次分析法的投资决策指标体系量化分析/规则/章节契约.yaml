@@ -1,0 +1,564 @@
+schema: cardo/invest-chapter-contract/v2
+version: 2
+extractedAt: '2026-10-22'
+updatedAt: '2026-10-23'
+producer: cardo-invest-spec/T3+T18
+source:
+  templateAsset: skills/cardo-invest-spec/assets/templates/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx
+  templateSha256: f8f97d8bcd317007d2d76e1871f319797fe7b8e297ee7a48365bb5dfafce7b10
+  originalSha256: 395b0a47ab448eac21c1c52cdbe7014db24e68b22c001c34eb6839e2751d026a
+  originalChapters: 10
+  originalHeadingCensus: 55 个标题 = H1×10 + H2×26 + H3×12 + H4×7
+  chapterRequirements: docs/模板逐章要求.md
+  chapterSkillConvention: docs/章节skill约定.md
+  note: 模板正文 34 处“数据来源”字样（28 标准 + 6 非标准）已全部转为 promptRules；成品 0 残留由全局断言保证
+units:
+  chapterCount: 10
+  tableSlotCount: 6
+  promptLineCount: 34
+  templateHeadingCount: 45
+  sectionNodeCount: 47
+  syntheticSectionCount: 2
+  tableIndexCount: 42
+  mandatoryTableCount: 35
+  optionalTableCount: 7
+  figureIndexCount: 12
+  mandatoryFigureCount: 8
+  conditionalFigureCount: 3
+  tableCountMin: 20
+  figureCountMin: 6
+  wordTotalMin: 21400
+  wordTotalFloor: 20000
+gates:
+  chapterScope: G-invest-2
+  promptLinePolicy: 提示行只作为取料规则，绝不出现在成品
+  writingScope: G-invest-7
+  writingPolicy: 语气/术语/禁用词/来源行/块级语法/题注只在 写作规范.yaml 定义，本契约只引用不复制
+writingProfile:
+  rulesFile: 写作规范.yaml
+  writingLib: scripts/writing.py
+  checker: scripts/check_report_v2.py
+  fragmentFormat: markdown + 块级 HTML 注释语法
+  fragmentPath: 05_过程/投资决策/分章/CH-XX.md
+  blockSyntaxRef: 写作规范.yaml#blockSyntax
+  contractRef: skills/cardo-invest-spec/规则/章节契约.yaml
+  chapterHeadingPolicy: 分章稿不写 H1（compose 生成）；小节标题
+  numbering:
+    table: 表 <章>-<章内出现序号>
+    figure: 图 <章>-<章内出现序号>
+    rule: 编号按成品出现顺序连续；章内不跳号、不重号
+  wordMinSemantics: wordMin = 该节自身正文中文字符数（不含下级小节/表格/来源行/标题）；章 wordMin = 各节之和
+  paragraphPlanSemantics: paragraphPlan 是有序段落意图清单，不是逐段模板；顺序可变通，段数不得少于 length-1
+  requiredQuestionsSemantics: 必答问题必须在小节正文里被明确回答；允许换句式，不允许漏答；答不出写（资料缺失：…）
+  acceptanceSemantics: acceptance 里的 id 指向 acceptanceCatalog；fail 级不过则该小节判 fail
+  optionalSemantics: optionalTables/optionalFigures 为材料充足时升级的选做项，不计入门槛
+  dataPolicy: 数字只读上游引擎 JSON；章节脚本禁止自行计算财务指标（财务口径.yaml 为唯一口径）
+  wordCountPolicy: count_cn_words() 统计中文汉字，去标题/表格/来源行/图块；实现见 scripts/writing.py
+globalAssertions:
+- id: CHK-INV-1
+  desc: 一级标题数量=10 且顺序与契约 chapters 一致
+  severity: fail
+- id: CHK-INV-2
+  desc: 表位 1–6 齐全且表头与表格契约一致
+  severity: fail
+- id: CHK-INV-3
+  desc: 成品不含“数据来源”提示行（0 残留），且契约 34 条 promptRules 每条已映射到 section
+  severity: fail
+- id: CHK-INV-4
+  desc: 成品不含占位符（双花括号/待补/TODO/XXX）
+  severity: fail
+- id: CHK-INV-5
+  desc: 成品与插件资产不含真实项目名（项目级扫描 0 命中）
+  severity: fail
+- id: CHK-INV-6
+  desc: 成品与插件文本不含盘符/UNC/用户目录绝对路径
+  severity: fail
+- id: CHK-INV-7
+  desc: 表位 1/2 指标数字/行名/单位与 财务测算.json 一致（成品展示容差 0.04pp/0.01 万元/0.01 年；锚点容差 0.5%/1 万元另见财务口径）
+  severity: fail
+- id: CHK-INV-8
+  desc: 每章有来源映射（sourceMap，≥10 章），断链 0（实现按 fail 校验，严于本 warn 级）
+  severity: warn
+chapters:
+- id: CH-09
+  number: 9
+  title: 基于AHP层次分析法的投资决策指标体系量化分析
+  level: 1
+  required: true
+  goal: 用可复核的量化方法把定性判断变成可比较的分数与排名；16 指标、权重合计=1、CR 有值、打分可溯源
+  audience:
+  - 评审
+  - 城投
+  wordMin: 2700
+  templateParagraphs:
+  - 312
+  - 315
+  - 316
+  - 328
+  - 348
+  requiredQuestions:
+  - Q1：16 指标与表位 4/6 是否一致
+  - Q2：表位 3/4 是否正互反、对角=1、列和正确
+  - Q3：表位 5/6 权重合计是否=1（容差 0.001）
+  - Q4：CR 是否逐矩阵有值或显式标注“未检验/临时权重”
+  - Q5：9.3 与 1.3 结论是否一致
+  paragraphPlan:
+  - P1 结论段（9.1）：为什么用 AHP + 体系结构 + 本章结论预告
+  - P2 准则层与指标层（9.1.2/9.1.3）
+  - P3 方法与矩阵（9.2 导语）
+  - P4 权重结果（9.2.1/9.2.2）+ 图 9-1
+  - P5 一致性检验（9.2.3）
+  - P6 打分与综合评分（9.2.4.1/9.2.4.2）+ 图 9-2
+  - P7 核心结论（9.3）
+  requiredTables:
+  - T9-1
+  - T9-2
+  - T9-3
+  - T9-4
+  - T9-5
+  - T9-6
+  - T9-7
+  - T9-8
+  - T9-9
+  - T9-10
+  optionalTables: []
+  requiredFigures:
+  - F9-1
+  - F9-2
+  optionalFigures: []
+  acceptance:
+  - ACC-STRUCT
+  - ACC-WORD
+  - ACC-KEYQ
+  - ACC-PARAS
+  - ACC-TABLE
+  - ACC-SLOT
+  - ACC-FIGURE
+  - ACC-SOURCE
+  - ACC-NUM
+  - ACC-TERM
+  - ACC-NOBAN
+  - ACC-CAPTION
+  - ACC-STALE
+  antiPatterns:
+  - 编数：写“各矩阵 CR 均 <0.1”却无具体值
+  - 虚假：默认权重却声称通过检验
+  - 数学：综合权重≠准则×子权重、权重和≠1
+  - 一致：排序与表位 6 不一致、TOP5 写成 6 个
+  - 矛盾：方案排序与 9.3 推荐、1.3 结论不一致
+  sections:
+  - id: CH-09-01
+    number: '9.1'
+    title: 构建项目投资决策三级指标体系
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 构建项目投资决策三级指标体系
+    goal: 导语 1–2 段：为什么用 AHP、体系结构（目标层—4 准则—16 指标）、与 9.2/9.3 的关系
+    audience:
+    - 评审
+    - 城投
+    wordMin: 200
+    requiredQuestions: []
+    paragraphPlan:
+    - P1 导语：引入理由 + 三级结构 + 16 项指标
+    requiredTables: []
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-SOURCE
+    source:
+      kind: ahp_or_default
+      from: 05_过程/AHP/权重表.json
+      missing: default_weight
+    children:
+    - id: CH-09-01-01
+      number: 9.1.1
+      title: 目标层（A）
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 目标层（A）
+      goal: 目标层表述 + 评价边界（单项目评价或多方案比选）
+      audience:
+      - 评审
+      wordMin: 120
+      requiredQuestions:
+      - Q1：目标层的表述是什么（评价对象与目标）
+      - Q2：评价边界是什么（单项目评价，还是多方案比选）
+      paragraphPlan:
+      - P1 目标层定义 + 与 9.2/9.3 的关系
+      requiredTables: []
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-KEYQ
+      - ACC-SOURCE
+      source:
+        kind: ahp_or_default
+        from: 05_过程/AHP/权重表.json#goal
+        missing: default_weight
+    - id: CH-09-01-02
+      number: 9.1.2
+      title: 准则层（B，一级指标）
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 准则层（B，一级指标）
+      goal: 四准则定义、选择依据、权重来源、标度与专家构成
+      audience:
+      - 评审
+      - 城投
+      wordMin: 250
+      requiredQuestions:
+      - Q1：四个准则（现状情况/投资经济/规划合规/风险可控）及各自含义是什么
+      - Q2：为什么是这四个（城市更新特性，避免纯地产评价误区）
+      - Q3：各准则权重来自谁（专家打分/默认权重）
+      - Q4：标度方法与专家构成是什么（1–9 标度、专家 5–7 人）
+      paragraphPlan:
+      - P1 4 准则及权重结论
+      - P2 各准则定义
+      - P3 选择依据
+      - P4 标度与专家
+      requiredTables:
+      - T9-1
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-KEYQ
+      - ACC-TABLE
+      - ACC-SOURCE
+      - ACC-TERM
+      source:
+        kind: ahp_or_default
+        from: 05_过程/AHP/权重表.json#criteria
+        missing: default_weight
+    - id: CH-09-01-03
+      number: 9.1.3
+      title: 指标层（C，二级细化指标）
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 指标层（C，二级细化指标）
+      goal: 16 个指标逐项给含义、量化口径、数据来源与子权重，并说明 0.1–1 标度
+      audience:
+      - 评审
+      wordMin: 230
+      requiredQuestions:
+      - Q1：16 个指标分别属于哪个准则、含义与量化方法是什么
+      - Q2：指标数据从哪来（现状指标/财务测算/规划文件）
+      - Q3：有没有重复、遗漏、不可量化的指标
+      - Q4：0.1–1 标度怎么用
+      paragraphPlan:
+      - P1 4×4=16 个指标的结论
+      - P2 按准则分组说明
+      - P3 数据来源与量化方法
+      - P4 标度说明
+      requiredTables:
+      - T9-2
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-KEYQ
+      - ACC-TABLE
+      - ACC-SOURCE
+      - ACC-NUM
+      source:
+        kind: ahp_or_default
+        from: 05_过程/AHP/权重表.json#indicators
+        missing: default_weight
+  - id: CH-09-02
+    number: '9.2'
+    title: 构建层级判别矩阵与权重计算
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 构建层级判别矩阵与权重计算
+    goal: 导语 1 段：方法（几何平均求权重、特征值法校验）、矩阵构造、计算步骤、一致性规则
+    audience:
+    - 评审
+    wordMin: 120
+    requiredQuestions: []
+    paragraphPlan:
+    - P1 导语：方法与步骤 + CR<0.1 规则
+    requiredTables: []
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-SOURCE
+    - ACC-TERM
+    source:
+      kind: ahp_or_default
+      from: 05_过程/AHP/权重表.json#methods
+      missing: default_weight
+    children:
+    - id: CH-09-02-01
+      number: 9.2.1
+      title: 准则层权重结果（一级指标权重）
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 准则层权重结果（一级指标权重）
+      goal: 矩阵与列和、行几何平均与权重、排序解读三件事（表 9-3/9-4 就地）
+      audience:
+      - 评审
+      wordMin: 250
+      requiredQuestions:
+      - Q1：准则层判别矩阵与列和各是什么
+      - Q2：行几何平均与权重各多少
+      - Q3：权重排序与含义是什么（哪个准则决定性）
+      paragraphPlan:
+      - P1 排序结论
+      - P2 矩阵与计算过程
+      - P3 权重解读
+      requiredTables:
+      - T9-3
+      - T9-4
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-KEYQ
+      - ACC-TABLE
+      - ACC-SLOT
+      - ACC-SOURCE
+      - ACC-NUM
+      source:
+        kind: ahp_or_default
+        from: 05_过程/投资决策/财务输入.json#ahpWeights.criteriaMatrix/criteriaWeights
+        missing: default_weight
+    - id: CH-09-02-02
+      number: 9.2.2
+      title: 指标层权重排序
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 指标层权重排序
+      goal: 16 项综合权重排序、TOP5、子权重×准则权重=综合权重校验、与第 8 章呼应（表 9-5/9-6 就地 + 图 9-1）
+      audience:
+      - 评审
+      - 城投
+      wordMin: 300
+      requiredQuestions:
+      - Q1：16 个指标的综合权重排序是什么
+      - Q2：TOP5 是哪些、为什么
+      - Q3：子权重与综合权重的关系（准则权重×子权重=综合权重）
+      - Q4：与第 8 章财务指标（成本/IRR/回收期）如何呼应
+      paragraphPlan:
+      - P1 TOP5 结论
+      - P2 权重排序表说明
+      - P3 排序解读（为什么这些指标决定成败）
+      requiredTables:
+      - T9-5
+      - T9-6
+      optionalTables: []
+      requiredFigures:
+      - F9-1
+      acceptance:
+      - ACC-WORD
+      - ACC-KEYQ
+      - ACC-TABLE
+      - ACC-SLOT
+      - ACC-FIGURE
+      - ACC-SOURCE
+      - ACC-NUM
+      - ACC-CAPTION
+      source:
+        kind: ahp_or_default
+        from: 05_过程/投资决策/财务输入.json#ahpWeights.indicatorWeights
+        missing: default_weight
+    - id: CH-09-02-03
+      number: 9.2.3
+      title: 矩阵一致性检验
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 矩阵一致性检验
+      goal: CR=CI/RI 公式、逐矩阵结果、未通过时的处置、权重有效性结论；CR 缺失不得编数
+      audience:
+      - 评审
+      wordMin: 250
+      requiredQuestions:
+      - Q1：检验方法与公式是什么（CR=CI/RI，CI=(λmax−n)/(n−1)），RI 取值多少
+      - Q2：各矩阵 CR 值是多少、是否 <0.1
+      - Q3：未通过时如何处理（重新打分/校准并记录）
+      - Q4：权重有效性结论是什么
+      paragraphPlan:
+      - P1 全部矩阵 CR<0.1（或 X 个未通过）的结论
+      - P2 方法与公式
+      - P3 逐矩阵结果
+      - P4 有效性判断
+      requiredTables:
+      - T9-7
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-KEYQ
+      - ACC-TABLE
+      - ACC-SOURCE
+      - ACC-NUM
+      - ACC-TERM
+      source:
+        kind: ahp_or_default
+        from: 05_过程/AHP/权重表.json#consistency
+        missing: default_weight
+    - id: CH-09-02-04
+      number: 9.2.4
+      title: 项目指标打分与综合评分计算
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 项目指标打分与综合评分计算
+      goal: 导语 1 段：10 分制、16 项逐项打分、加权求和、评级规则
+      audience:
+      - 评审
+      - 城投
+      wordMin: 120
+      requiredQuestions: []
+      paragraphPlan:
+      - P1 导语：打分方法 + 评级规则
+      requiredTables: []
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-SOURCE
+      source:
+        kind: ahp_or_default
+        from: 05_过程/AHP/评分表.json
+        missing: default_weight
+      children:
+      - id: CH-09-02-04-01
+        number: 9.2.4.1
+        title: 评级标准设定
+        level: 4
+        required: true
+        templateHeading: true
+        renderHeading: true
+        templateHeadingText: 评级标准设定
+        goal: 评级区间与决策建议、打分方法与证据要求，边界归属写清
+        audience:
+        - 评审
+        wordMin: 120
+        requiredQuestions:
+        - Q1：得分区间与评级如何对应（9–10 优秀/7–9 良好/6–7 一般/<6 不可行），边界怎么取
+        - Q2：打分方法是什么（专家打分/数据换算/文件对照）
+        - Q3：打分证据要求是什么
+        paragraphPlan:
+        - P1 标准表 + 边界说明
+        - P2 打分方法与证据要求
+        requiredTables:
+        - T9-8
+        optionalTables: []
+        requiredFigures: []
+        acceptance:
+        - ACC-WORD
+        - ACC-KEYQ
+        - ACC-TABLE
+        - ACC-SOURCE
+        source:
+          kind: ahp_or_default
+          from: 05_过程/AHP/评分表.json#scoring
+          missing: default_weight
+      - id: CH-09-02-04-02
+        number: 9.2.4.2
+        title: 项目最终得分
+        level: 4
+        required: true
+        templateHeading: true
+        renderHeading: true
+        templateHeadingText: 项目最终得分
+        goal: 综合得分与评级、加权贡献、多方案排序、投资标准判断（表 9-9/9-10 + 图 9-2）
+        audience:
+        - 城投
+        - 评审
+        wordMin: 240
+        requiredQuestions:
+        - Q1：综合得分多少，评级是什么
+        - Q2：各指标得分与加权贡献是什么（TOP 加分项/扣分项）
+        - Q3：多方案得分排序如何（若有 3 方案）
+        - Q4：是否达到公司投资标准
+        paragraphPlan:
+        - P1 得分+评级结论
+        - P2 得分表与加权说明
+        - P3 方案排序（若有）
+        - P4 投资标准判断
+        requiredTables:
+        - T9-9
+        - T9-10
+        optionalTables: []
+        requiredFigures:
+        - F9-2
+        acceptance:
+        - ACC-WORD
+        - ACC-KEYQ
+        - ACC-TABLE
+        - ACC-FIGURE
+        - ACC-SOURCE
+        - ACC-NUM
+        - ACC-CAPTION
+        source:
+          kind: ahp_or_default
+          from: 05_过程/AHP/评分表.json#schemes/ranking
+          missing: default_weight
+  - id: CH-09-03
+    number: '9.3'
+    title: AHP量化分析核心结论
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: AHP量化分析核心结论
+    goal: 得分评级、加分项、扣分项与对冲、颠覆性风险判断、决策建议、与 1.3/8 章交叉验证
+    audience:
+    - 城投
+    - 评审
+    wordMin: 500
+    requiredQuestions:
+    - Q1：AHP 怎么得出结论（对象、得分、评级、排名）
+    - Q2：核心加分项是什么
+    - Q3：核心扣分项是什么，如何对冲（分期/补贴/业态/政策）
+    - Q4：是否存在颠覆性风险（一票否决项）
+    - Q5：决策建议是什么（立项/分期/优化后/暂缓）
+    - Q6：与 1.3 核心投资结论、第 8 章财务结论是否一致
+    paragraphPlan:
+    - P1 结论：综合得分 X、评级 Y，建议…
+    - P2 加分项
+    - P3 扣分项与对冲
+    - P4 风险与决策建议
+    - P5 与财务/方案结论的交叉验证
+    requiredTables: []
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-SOURCE
+    - ACC-NUM
+    source:
+      kind: ahp_or_default
+      from: 05_过程/AHP/评分表.json
+      missing: default_weight
+promptRules:
+- id: R-34
+  paragraph: 353
+  section: CH-09-03
+  text: （数据来源，根据AHP计算结果填写）
+  kind: ahp_or_default
+  from: 05_过程/AHP/评分表.json
+  missing: default_weight

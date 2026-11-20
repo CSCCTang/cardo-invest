@@ -1,0 +1,396 @@
+schema: cardo/invest-finance-rules/v1
+version: 1
+extractedAt: "2026-10-22"
+producer: cardo-invest-spec/T4
+source:
+  template: 数据/标准模板/3 财务评价模板.xlsx
+  templateSha256: 10999c569f9b2bd2dd8fcdb99b35d4ffd2ca5727d8ea6777bf1453d753c5cbb1
+  reconReport: docs/专题/模板侦察.md
+  dumpEvidence: 数据/回归工作区/invest-T4/参数候选.md
+  note: 口径逐条对回模板干净表（附表1/2/3/4/5/6/7/8）；带病样例的坏公式不参照；对账只用原始 xlsx
+gates:
+  G-invest-3: pendingConfirm
+  G-invest-5: pendingConfirm
+  policy: 未答复按本节默认执行；答复后改口径 = version +1 + 跑 T8 对账回归
+units:
+  amount: 万元
+  ratio: "%"
+  years: 年
+  area: 平方米
+  price: 元
+rounding:
+  amountDecimals: 2
+  ratioDecimals: 2
+  yearDecimals: 2
+  weightDecimals: 4
+  irrTolerance: 1e-8
+  mode: ROUND_HALF_UP
+period:
+  constructionYears: 3
+  operationYears: 30
+  totalYears: 33
+  discountRate: 0.035
+  discountRateSource: 附表6!G19 =NPV(3.5%,H15:AN15)
+  yearIndexStart: 1
+cashflow:
+  allInvestment:
+    rows:
+      - id: inflow
+        name: 现金流入
+        items: [营业收入, 回收固定资产余值]
+      - id: outflow
+        name: 现金流出
+        items: [建设投资, 经营成本, 增值税及附加]
+      - id: ebt
+        name: 所得税前净现金流量（1-2）
+      - id: cumEbt
+        name: 累计所得税前净现金流量
+      - id: adjustTax
+        name: 调整所得税
+        formula: 所得税前净现金流量（息税前口径）× 所得税率
+      - id: eat
+        name: 所得税后净现金流量
+        formula: 所得税前净现金流量 - 调整所得税
+      - id: cumEat
+        name: 累计所得税后净现金流量
+    sourceSheet: 附表6-项目投资现金流量表
+  equity:
+    rows:
+      - id: inflow
+        name: 现金流入
+        items: [营业收入, 回收固定资产余值]
+      - id: outflow
+        name: 现金流出
+        items: [项目资本金, 经营成本, 增值税及附加, 借款本金偿还, 借款利息支付]
+      - id: ebt
+        name: 所得税前净现金流量（1-2）
+      - id: cumEbt
+        name: 累计所得税前净现金流量
+      - id: adjustTax
+        name: 所得税
+        formula: 应纳税所得额 × 所得税率
+      - id: eat
+        name: 所得税后净现金流量
+        formula: 所得税前净现金流量 - 所得税
+      - id: cumEat
+        name: 累计所得税后净现金流量
+    sourceSheet: 附表7-现金流量表 (资本金)
+investment:
+  totalInvestment:
+    formula: 建设投资 + 建设期利息
+    components: [工程费用, 工程建设其他费, 预备费, 建设期利息]
+  constructionInvestment:
+    formula: 工程费用 + 工程建设其他费 + 预备费
+  engineeringCost:
+    formula: sum(单项工程工程费)
+    missingPolicy: gap
+  otherFees:
+    formula: sum(其他费明细项)
+    basis: 每项由取费基数 × 费率 或 定额给出
+    missingPolicy: gap
+    sourceSheet: 工程建设其他费计算汇总表
+  contingency:
+    formula: （工程费用 + 工程建设其他费）× 预备费率
+    defaultRate: by_input
+    missingPolicy: gap
+  constructionInterest:
+    formula: 当年借款额 × 年利率 × 计息月数/12（建设期按半年计息）
+    halfYearFactor: 0.5
+    sourceCell: 附表1-项目总投资使用计划与资金筹措表!H11 =H13*$G$15*6/12
+  funding:
+    formula: 资本金 + 专项融资（借款） + 政策性补助 = 总投资
+    equityRatioCheck: 资本金/资金筹措合计（附表1!D9 =G9/G8 = 0.4186）
+    loanRatioCheck: 借款/资金筹措合计（附表1!D12 =G12/G8 = 0.5814）
+revenue:
+  items:
+    - key: parking
+      name: 停车位收入
+      formula: 车位数 × 单车位日收费 × 年运营天数 × 周转率 × 出租率 / 10000
+      unit: 万元/年
+      vatRate: 0.06
+      sourceRow: 附表2!B6
+    - key: mobile-food
+      name: 流动餐车租赁收入
+      formula: 餐车数量 × 月租金 × 12 × 出租率 / 10000
+      unit: 万元/年
+      vatRate: 0.06
+      sourceRow: 附表2!B13
+    - key: outdoor-dining
+      name: 外摆空间租赁收入
+      formula: 外摆面积 × 月单价 × 12 × 出租率 / 10000
+      unit: 万元/年
+      vatRate: 0.06
+      sourceRow: 附表2!B18
+    - key: advertising
+      name: 广告收入
+      formula: （广告灯箱数量 × 灯箱单价 + 餐车广告位数量 × 餐车广告单价）× 出租率 / 10000
+      unit: 万元/年
+      vatRate: 0.06
+      sourceRow: 附表2!B23
+    - key: charging
+      name: 充电桩收入
+      formula: 快慢充数量 × 单桩年收入
+      unit: 万元/年
+      vatRate: 0.06
+      sourceRow: 附表2!B30
+    - key: shop-rent
+      name: 商铺租赁收入
+      formula: 租赁面积 × 月单价 × 12 / 10000
+      unit: 万元/年
+      vatRate: 0.11
+      vatRateNote: 模板用 11%（旧税率），现行不动产租赁 9%；G-invest-3 确认后按新率
+      sourceRow: 附表2!B36
+    - key: office-rent
+      name: 办公租赁收入
+      formula: 租赁面积 × 月单价 × 12 / 10000
+      unit: 万元/年
+      vatRate: 0.11
+      vatRateNote: 同上
+      sourceRow: 附表2!B41（模板实测该行为商铺租赁行；办公租赁无独立模板行，按同结构派生）
+    - key: other
+      name: 其他收入
+      formula: 按项目实际
+      unit: 万元/年
+      vatRate: 0.06
+  outputVat:
+    formula: 含税收入 /（1 + 税率）× 税率
+    sourceCell: 附表2!H12 =H6/1.06*0.06
+  firstYearHalfFactor: 0.5
+  growthPolicy: 由输入给定；未给则 gap（不猜）
+cost:
+  operatingCost:
+    formula: 外购燃料及动力费 + 员工工资及福利费 + 管理费用 + 日常修理费 + 其他费用 + 大修费
+    items:
+      - key: utilities
+        name: 外购燃料及动力费
+        formula: 运营收入 × 3%
+        rate: 0.03
+        sourceCell: 附表3!B5
+      - key: labor
+        name: 员工工资及福利费
+        formula: 定员 × 人均年薪 × 福利系数；第二年起按比例递增
+        defaultCrew: 6
+        defaultSalaryWan: 7
+        defaultWelfareFactor: 1.2
+        growthRate: 0.03
+        sourceCell: 附表3!B6（D6=6*7*1.2）
+      - key: management
+        name: 管理费用
+        formula: 运营收入 × 2%
+        rate: 0.02
+        sourceCell: 附表3!B7
+      - key: repair
+        name: 日常修理费
+        formula: 前 10 年 运营收入 × 1.5%；后 19 年 × 2%
+        rate: 0.015
+        rateAfter10y: 0.02
+        sourceCell: 附表3!B8
+      - key: other
+        name: 其他费用
+        formula: 运营收入 × 1.5%
+        rate: 0.015
+        sourceCell: 附表3!B9
+      - key: overhaul
+        name: 大修费
+        formula: 每 10 年计取一次，固定资产原值 × 4%
+        rate: 0.04
+        cycleYears: 10
+        sourceCell: 附表3!B10
+  depreciation:
+    building:
+      formula: 房屋建筑物原值 ×（1 - 残值率）/ 折旧年限；首年按半年
+      years: 30
+      residualRate: 0.05
+      firstYearHalf: true
+      sourceCell: 附表5!D7 =C6*(1-C9)/30*0.5
+    land:
+      formula: 土地费用 ×（1 - 残值率）/ 摊销年限
+      years: 30
+      residualRate: 0
+      sourceCell: 附表5!D11 =C10*(1-C13)/30
+  financeCost:
+    formula: 运营期各年利息支出（来自借款还本付息计划）
+    sourceSheet: 附表8-借款还本付息计划表
+    sourceCell: 附表3!D13 =附表8!K11
+tax:
+  vat:
+    output:
+      serviceRate: 0.06
+      rentalRate: 0.11
+      rentalRateNote: 旧税率；现行 9%，G-invest-3 确认
+      goodsRate: 0.13
+    input:
+      constructionRate: 0.09
+      otherFeeRate: 0.06
+      utilitiesRate: 0.06
+      utilitiesRateNote: 附表2!D57=0.06（模板进项税率），此前误写 0.09，已按模板修正
+      laborRate: 0.13
+      laborRateNote: 模板以 13% 折算（附表2!H58），无独立税率单元格；待 G-invest-3 确认
+      repairRate: 0.13
+      repairRateNote: 同 laborRate，按 13% 折算
+      sourceCells: [附表2!D53, 附表2!D55, 附表2!D57]
+    payable:
+      formula: 销项税额 - 进项税额（负数按 0 计）
+      sourceCell: 附表2!H47 =IF(H49>0,H49,0)
+  surcharges:
+    urbanMaintenanceRate: 0.07
+    educationSurchargeRate: 0.05
+    basis: 应纳增值税
+    sourceCells: [附表2!D61, 附表2!D62]
+  stampDuty:
+    rentalRate: 0.001
+    saleRate: 0.0005
+    sourceCell: 附表2!D63, 附表2!E63
+  landUseTax:
+    ratePerSqm: 8
+    formula: 计税土地面积 × 单位税额 / 10000
+    templateInconsistency: 模板标注 8 元/㎡，公式按 4.5 元/㎡（H20*4.5/10000）；默认采用标注值 8，另留参数覆盖
+    sourceCell: 附表2!D64
+  propertyTax:
+    formula: 房产租赁收入 × 12%（从租计征）
+    rate: 0.12
+    enabled: false
+    templateInconsistency: 模板公式乘 0（未启用）；默认 enabled=false，启用时按 12%
+    sourceCell: 附表2!H65 =(H18-H22)*0.12*0
+  incomeTax:
+    rate: 0.25
+    sourceCells: [附表4!H11 =H10*0.25, 附表6!D14, 附表7!D17]
+profit:
+  legalReserveRate: 0.10
+  discretionaryReserveRate: 0.05
+  sourceCells: [附表4!D15, 附表4!D17]
+  distribution: 剩余可供分配利润按股东比例分配（默认不分配，留作未分配利润）
+indicators:
+  - key: firrAll
+    name: 全部投资财务内部收益率（税后）
+    unit: "%"
+    formula: IRR(全部投资所得税后净现金流量)
+    precision: 6
+    anchor: 附表6!G18
+  - key: fnpvAll
+    name: 全部投资财务净现值
+    unit: 万元
+    formula: NPV(折现率, 全部投资所得税后净现金流量)
+    anchor: 附表6!G19
+  - key: ptAll
+    name: 全部投资静态投资回收期
+    unit: 年
+    formula: 累计净现金流量首次转正年 - 1 + |上年累计| / 当年净现金流量
+    anchor: 附表6!G20（模板公式 W4+V16/W15）
+  - key: firrEquity
+    name: 资本金财务内部收益率（税后）
+    unit: "%"
+    formula: IRR(资本金所得税后净现金流量)
+    anchor: 附表7!G21
+  - key: fnpvEquity
+    name: 资本金财务净现值
+    unit: 万元
+    formula: NPV(折现率, 资本金所得税后净现金流量)
+    anchor: 附表7!G22
+  - key: ptEquity
+    name: 资本金静态投资回收期
+    unit: 年
+    formula: 同全部投资回收期，口径为资本金现金流
+    anchor: 附表7!G23
+  - key: roe
+    name: 净资产收益率（ROE）
+    unit: "%"
+    formula: 年平均净利润 / 项目资本金
+    sourceCell: 附表4!H25 =G25/资金筹措表!G10
+  - key: roi
+    name: 总投资收益率（ROI）
+    unit: "%"
+    formula: 年平均息税前利润 / 项目总投资
+    sourceCell: 附表4!H26 =G26/资金筹措表!G8
+  - key: icr
+    name: 利息备付率
+    unit: 倍
+    formula: 息税前利润 / 当期应付利息
+    basis: 建议书第八章口径（模板无现成计算；附表8!G21 为硬编码 30，不可参照）
+    missingPolicy: gap
+  - key: dscr
+    name: 偿债备付率
+    unit: 倍
+    formula: （息税折旧摊销前利润 - 所得税）/（当期还本 + 利息）
+    basis: 建议书第八章口径
+    sourceCell: 附表8!G20 =G13/G9（模板有值 3.24，口径按本节公式重算）
+    missingPolicy: gap
+anchors:
+  tolerance:
+    ratioPercent: 0.5
+    amountWan: 1.0
+    years: 0.5
+    irr: 0.00000001
+  items:
+    - id: A6-FIRR
+      cell: 附表6!G18
+      formula: =IRR(H15:AN15)
+      expected: 0.0713
+      display: 7.13%
+    - id: A6-FNPV
+      cell: 附表6!G19
+      formula: =NPV(3.5%,H15:AN15)
+      expected: 11918
+      unit: 万元
+    - id: A6-PT
+      cell: 附表6!G20
+      formula: =W4+V16/W15
+      expected: 15.93
+      unit: 年
+    - id: A7-FIRR
+      cell: 附表7!G21
+      formula: =IRR(H18:AN18)
+      expected: 0.1372
+      display: 13.72%
+    - id: A7-FNPV
+      cell: 附表7!G22
+      formula: =NPV(3.5%,H18:AN18)
+      expected: 13563
+      unit: 万元
+    - id: A7-PT
+      cell: 附表7!G23
+      formula: =R4+Q19/R18
+      expected: 10.62
+      unit: 年
+    - id: A4-ROE
+      cell: 附表4!H25
+      formula: =G25/'附表1-项目总投资使用计划与资金筹措表'!G10
+      expected: 0.127
+      display: 12.7%
+    - id: A4-ROI
+      cell: 附表4!H26
+      formula: =G26/'附表1-项目总投资使用计划与资金筹措表'!G8
+      expected: 0.08
+      display: 8.00%
+reconciliation:
+  truthSource: 数据/标准模板/3 财务评价模板.xlsx（只读；2026-10-23 前位于工作根）
+  cleanQuoteSubset: [附表2, 附表3, 附表5, 附表6, 附表7, 附表8]
+  cleanByAnchor: [附表1, 附表4]
+  rule: 按内容而非标题编号对账（模板表内编号有错位）
+  antiCheat:
+    - 引擎不得读取模板结果单元格（G18/G19/G20/G21/G22/G23/H25/H26）作为输出
+    - 必须由输入块重算，并在计算轨迹里贴输入来源（单元格坐标 + 值），不贴结果缓存
+  evidence: 数据/回归工作区/invest-T8/对账报告
+defects:
+  - id: FD-01
+    desc: 土地使用税标注 8 元/㎡、公式按 4.5 元/㎡
+    handling: 默认用标注值并留参数覆盖；G-invest-3 确认
+  - id: FD-02
+    desc: 房产税公式乘 0（未启用）
+    handling: 默认 enabled=false；启用按 12% 从租
+  - id: FD-03
+    desc: 不动产租赁销项税率 11% 为旧税率（现行 9%）
+    handling: 默认沿用模板 11% 并显式标注；G-invest-3 确认后改
+  - id: FD-04
+    desc: 附表8 利息备付率 G21 为硬编码 30（=30），非计算值
+    handling: 口径按公式重算，不参照该单元格
+  - id: FD-05
+    desc: 表内编号错位（附表6 内小标题写附表7 等）
+    handling: 按内容对账，不按标题编号
+  - id: FD-06
+    desc: 附表4!D19 ROI 定义列为 #REF!（结果列为 H25/H26，正常）
+    handling: 只取 H 列结果，不参照 D 列
+missingPolicy:
+  default: gap
+  rule: 缺数 → gaps[] + 指标 status=gap；不补数、不猜、不用行业经验值
+  conflictPolicy: 输入与口径冲突 → exit 3（needs_confirm），不静默取其一

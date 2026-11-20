@@ -1,0 +1,718 @@
+# =============================================================================
+# 写作规范 v3（T18 → v3 结论优先改版，与 CardoStatus/CardoAHP/CardoOSGB 统一）
+#
+# 单一真值：语气/术语/禁用词/来源行/缺项写法/块级语法/题注/单位 只在本文件定义；
+# 10 个 chapter skill、writing.py、check_report_v2.py、review 一律读本文件，不各自造规则。
+#
+# v3 变更（真实用户试用反馈，四包统一约定）：
+#   1) 结论优先：每节首段先给判定；资料少也要有判定，不许整节写「资料缺失」；
+#   2) 缺口降级：正文不写缺口口语，缺口只进 缺项表.md / 数据缺口清单；
+#   3) 默认干净版（clean），需要留痕时用 --edition gap；
+#   4) 允许联网检索公开信息，须标来源与检索日期；
+#   5) 无一手数据的数值：给「估算值 + 反算依据」并标注「估算」，不编造具体数字。
+#
+# 合并口径（T17 与 Lead 输出的差异处理）：
+#   - 字数/表图清单以 T17 为准（全书 21,400 字；必备表 35 张、必备图 8 张）
+#   - 分章稿格式（不写 H1、块级语法、缺项写法）以 docs/章节skill约定.md 为准
+#   - 缺项口径 v3 覆盖旧约定：缺料先推断（标置信度），缺项只在附录/缺项表留痕
+#
+# 变更口径：改本文件 = 改标准 → version +1 + 跑 check_report_v2.py --all 回归
+# =============================================================================
+schema: cardo/invest-writing-rules/v1
+version: 3
+extractedAt: "2026-10-23"
+producer: cardo-invest-spec/T18
+source:
+  contractRef: skills/cardo-invest-spec/规则/章节契约.yaml
+  financeRuleRef: skills/cardo-invest-spec/规则/财务口径.yaml
+  tableContractRef: skills/cardo-invest-spec/规则/表格契约.yaml
+  templateRef: skills/cardo-invest-spec/模板/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx
+  reconReport: docs/专题/模板侦察.md
+  chapterRequirements: docs/模板逐章要求.md
+  chapterSkillConvention: docs/章节skill约定.md
+mergeStatus:
+  t17: merged
+  mergedAt: "2026-10-23"
+  note: T17 的通用写作规则（§2）已全量落入本文件；逐章必答/段落/表图/字数落入 章节契约 v2
+
+# ---------------------------------------------------------------- 1. 语气与读者
+tone:
+  principle: [结论先行, 数据支撑, 一段一意, 可溯源, 不注水]
+  voice: 客观陈述第三人称；不用“我们认为/我觉得/应该是”等主观口吻
+  conclusionFirst:
+    rule: 每节第一段（结论段）先给判断，再给依据；判断句必须含可核数字或可核事实
+    pattern: “本项目<判断>：<关键数字/事实>，<依据来源>”
+    counterExample: “本项目具有较好的可行性。”（无数字、无依据，判 fail）
+  paragraph:
+    maxChars: 300
+    idealChars: [120, 220]
+    onePointPerParagraph: true
+    oneSectionOneTheme: true
+    noOrphanSentence: 不使用“如下所示”“详见下文”单独成段
+    forbidEmptyTransition: 不用“综上所述/总而言之/众所周知”等空转承接词开段
+  paragraphTriplet:
+    rule: 每个分析小节至少含 ①结论句 ②证据/测算 ③判断或建议；缺一即“只罗列不分析”
+    exception: 清单型小节（编制依据/附件清单）可结论在后
+  antiFluff:
+    - 不写没有信息增量的判断句（“具有一定的意义/较为重要”）
+    - 不为凑字数重复上段结论；字数不足时补“数据/机制/影响”三层，不补形容词
+    - 不写无法核验的预测（“未来可期”“前景广阔”）
+  redLines:
+    - id: RED-01
+      desc: 空话——连续 2 句无数据、无判断、无来源（如“坚持保护优先、因地制宜推进”）
+      level: fail
+    - id: RED-02
+      desc: 编数——引擎 JSON 没有的数字（客流、租金、人口、CR 值）自行给值
+      level: fail
+    - id: RED-03
+      desc: 口径不一致——同一指标两处不同；税前税后混用；单位/小数位不统一
+      level: fail
+    - id: RED-04
+      desc: 只罗列不分析——连续 3 条以上并列项（政策/问题/收入项）后无归并判断
+      level: fail
+  audience:
+    政府: 区/市发改、住建、财政、规划等主管部门；关心政策符合性、规划合规、资金申请条件、民生效益
+    城投: 城投公司董事会/投委会/经营层、投资与财务部；关心投不投、投多少、收益与风险、资本金与融资、退出
+    评审: 外部评审专家（可研/财务/规划/造价）；关心数据可溯源、口径一致、论证闭环、指标是否达标
+    内部: 项目组、工程管理、运营团队、档案；关心怎么干、什么节点、谁负责、材料齐不齐
+  audienceStyle:
+    政府: 政策名称/文号/条款逐条具名，合规结论显式，规划约束单列
+    城投: 结论段前 200 字内必须出现投资额与核心指标，明确“建议投/审慎投/暂缓”
+    评审: 每个结论后有“来源：”行；口径差异（与模板旧值/与口径文件）显式说明
+    内部: 分项动作写到“做什么+工程量+金额+责任主体+时间节点”
+
+# ---------------------------------------------------------------- 1.5 结论优先与缺口口径（v3 四包统一）
+edition:
+  default: clean      # 干净版：正文无缺口提示、无「资料缺失」字样
+  gap: gap            # 缺项留痕版：可选，缺口在附录/缺项表逐条留痕
+  cleanBannedInBody: [资料缺失, 未提供, 资料不足, 待补, 缺项-, 缺什么, 找谁补]
+conclusionFirst:
+  required: true
+  template: "初步判定：<结论>（推断依据：<材料/公开区间>；置信度：高/中/低；区间：a～b）"
+  rule: 资料再少也要给初步判定；判断句仍须可溯源（推断要标依据与置信度）
+inference:
+  allowed: true
+  bases: [现有材料的间接证据, 同类项目公开区间（具名来源+检索日期）, 公开政策/标准/统计的约束值]
+  must: [标注「推断」与依据, 给出置信度, 尽量给区间, 与项目材料冲突时以材料为准]
+  forbidden: [把推断写成实测, 编造数字/文号/来源, 用推断值填需实测的表]
+  estimatedValue: 估算值须同行标「估算」并写反算依据（如户均面积×户数）
+network:
+  allowed: true
+  citation: "来源：<机构/文件名/网址>；检索日期：YYYY-MM-DD"
+  notFound: "未获取公开数据，按同类项目区间推断（置信度：低）"
+  rule: 允许主动检索政策/片区统计/造价与体检指标/同类案例；不得把查不到写成「资料缺失」
+problemChapter:
+  perProblem: [表现, 证据或推断依据, 成因, 影响, 对应更新方向]
+  judgementRequired: true
+
+# ---------------------------------------------------------------- 2. 术语表
+# 口径对齐 财务口径.yaml 与 表格契约.yaml；缩写首次出现写“全称（缩写）”
+terminology:
+  - term: 折现率
+    fullName: 折现率（基准收益率）
+    abbr: i
+    definition: 将计算期内各年现金流折算为现值的比率；默认取 5 年期以上 LPR 3.50%
+    unit: "%"
+    decimals: 2
+    source: 财务口径.yaml#period.discountRate
+    required: true
+  - term: 计算期
+    fullName: 计算期
+    abbr: ""
+    definition: 建设期 + 运营期；以引擎 period.totalYears 为准（示例项目 3+30=33 年），模板旧值 32 年禁用
+    unit: 年
+    decimals: 0
+    source: 财务口径.yaml#period
+    required: true
+  - term: FIRR
+    fullName: 财务内部收益率
+    abbr: FIRR
+    definition: 使项目计算期内净现值等于零的折现率；分全部投资与资本金两个口径，均为所得税后
+    unit: "%"
+    decimals: 2
+    source: 财务口径.yaml#indicators
+    required: true
+  - term: FNPV
+    fullName: 财务净现值
+    abbr: FNPV
+    definition: 按基准收益率折现后的净现值；分全部投资与资本金两个口径，均为所得税后
+    unit: 万元
+    decimals: 2
+    source: 财务口径.yaml#indicators
+    required: true
+  - term: PT
+    fullName: 静态投资回收期
+    abbr: PT
+    definition: 以净收益回收全部投资所需时间，自建设期起算，含建设期
+    unit: 年
+    decimals: 2
+    source: 财务口径.yaml#indicators
+    required: true
+  - term: ICR
+    fullName: 利息备付率
+    abbr: ICR
+    definition: 息税前利润与当期应付利息之比；正文须写明口径（运营期聚合/逐年）
+    unit: 倍
+    decimals: 4
+    source: 财务口径.yaml#indicators
+    required: true
+  - term: DSCR
+    fullName: 偿债备付率
+    abbr: DSCR
+    definition: （EBITDA−所得税）/（还本+利息）；正文须写明“运营期聚合口径”
+    unit: 倍
+    decimals: 4
+    source: 财务口径.yaml#indicators
+    required: true
+  - term: ROE
+    fullName: 资本金净利润率
+    abbr: ROE
+    definition: 年平均净利润与项目资本金之比（NP/EC）
+    unit: "%"
+    decimals: 2
+    source: 财务口径.yaml#indicators
+    required: true
+  - term: ROI
+    fullName: 总投资收益率
+    abbr: ROI
+    definition: 年平均息税前利润与项目总投资之比（EBIT/TI）
+    unit: "%"
+    decimals: 2
+    source: 财务口径.yaml#indicators
+    required: true
+  - term: 总投资
+    fullName: 项目总投资
+    abbr: ""
+    definition: 建设投资与建设期利息之和；建设投资 = 工程费用 + 工程建设其他费 + 预备费
+    unit: 万元
+    decimals: 2
+    source: 财务口径.yaml#investment.totalInvestment
+    required: true
+  - term: 建设投资
+    fullName: 建设投资
+    abbr: ""
+    definition: 工程费用 + 工程建设其他费 + 预备费，不含建设期利息
+    unit: 万元
+    decimals: 2
+    source: 财务口径.yaml#investment.constructionInvestment
+    required: false
+  - term: 建设期利息
+    fullName: 建设期利息
+    abbr: ""
+    definition: 建设期借款按半年计息累计的利息，计入总投资
+    unit: 万元
+    decimals: 2
+    source: 财务口径.yaml#investment.constructionInterest
+    required: false
+  - term: 经营成本
+    fullName: 经营成本
+    abbr: ""
+    definition: 外购燃料及动力费、工资及福利费、管理费、日常修理费、其他费用及大修费之和
+    unit: 万元
+    decimals: 2
+    source: 财务口径.yaml#cost.operatingCost
+    required: false
+  - term: 增值税及附加
+    fullName: 增值税及附加
+    abbr: ""
+    definition: 销项税减进项税后的增值税，加城建税、教育费附加、地方教育费附加
+    unit: 万元
+    decimals: 2
+    source: 财务口径.yaml#tax
+    required: false
+  - term: 资本金
+    fullName: 项目资本金
+    abbr: ""
+    definition: 由项目单位以自有资金投入、不形成债务的部分；须满足项目资本金制度（一般 ≥20%）
+    unit: 万元
+    decimals: 2
+    source: 财务口径.yaml#investment.funding
+    required: false
+  - term: 专项融资
+    fullName: 银行专项融资（借款）
+    abbr: ""
+    definition: 银行专项借款，需还本付息，构成项目债务
+    unit: 万元
+    decimals: 2
+    source: 财务口径.yaml#investment.funding
+    required: false
+  - term: 政策性补助
+    fullName: 政策性补助资金
+    abbr: ""
+    definition: 中央/省/市城市更新专项补助，不需偿还；不得写成已确定收入
+    unit: 万元
+    decimals: 2
+    source: 财务口径.yaml#investment.funding
+    required: false
+  - term: 综合得分
+    fullName: AHP 综合得分
+    abbr: ""
+    definition: 10 分制逐指标打分后按综合权重加权求和的结果；评级边界 9/7/6 分
+    unit: 分
+    decimals: 2
+    source: 章节契约.yaml#CH-09-02-04-02
+    required: false
+  - term: CR
+    fullName: 一致性比率
+    abbr: CR
+    definition: CR = CI / RI，CI=(λmax−n)/(n−1)；CR 小于 0.1 视为判别矩阵一致性合格
+    unit: ""
+    decimals: 4
+    source: 章节契约.yaml#CH-09-02-03
+    required: false
+  - term: 准则层
+    fullName: 准则层（一级指标）
+    abbr: B
+    definition: AHP 指标体系第二层：现状情况/投资经济/规划合规/风险可控
+    unit: ""
+    decimals: 0
+    source: "表格契约.yaml#tableSlots 表位 3"
+    required: false
+  - term: 指标层
+    fullName: 指标层（二级细化指标）
+    abbr: C
+    definition: AHP 指标体系第三层，每准则 4 项指标，共 16 项
+    unit: ""
+    decimals: 0
+    source: "表格契约.yaml#tableSlots 表位 4"
+    required: false
+  - term: 建筑密度
+    fullName: 建筑密度
+    abbr: ""
+    definition: 建筑基底总面积与用地面积之比；正文须写明口径（基底密度）
+    unit: "%"
+    decimals: 2
+    source: 05_过程/低空解析/现状指标.json#buildingCoverage
+    required: false
+  - term: 容积率
+    fullName: 容积率
+    abbr: ""
+    definition: 计容建筑面积与用地面积之比；估算值须写明方法
+    unit: ""
+    decimals: 2
+    source: 04_成果报告/现状分析报告#现状指标
+    required: false
+  - term: 绿化覆盖率
+    fullName: 绿化覆盖率
+    abbr: ""
+    definition: 绿化垂直投影面积与用地面积之比
+    unit: "%"
+    decimals: 2
+    source: 05_过程/低空解析/现状指标.json#greenery
+    required: false
+  - term: 更新范围
+    fullName: 更新范围
+    abbr: ""
+    definition: 项目实施的四至边界与改造对象集合；与调研范围一致时引用现状报告，不一致时手动界定并说明
+    unit: 平方米
+    decimals: 2
+    source: 章节契约.yaml#CH-05-01
+    required: false
+  - term: 全局权重
+    fullName: 综合权重（全局权重）
+    abbr: ""
+    definition: 准则层权重 × 指标层子权重；16 项合计 = 1（容差 0.001）
+    unit: ""
+    decimals: 4
+    source: "表格契约.yaml#tableSlots 表位 6"
+    required: false
+firstUseRule: 术语首次出现写“全称（缩写）”，同章此后只用缩写；不在同一段重复定义
+terminologyChecks:
+  - 同一指标全文只用一个术语与一个单位（不得混用“内部收益率”与“FIRR”指代不同口径）
+  - 缩写首次出现未给全称 → fail
+  - 比率写成小数（0.0815）而非百分数（8.15%）→ fail
+  - 指标必须标“税前/税后”“全部投资/资本金”，缺标注 → fail
+
+# ---------------------------------------------------------------- 3. 禁用词
+# 命中即 fail（check_report_v2.py 逐条校验）；replacement 是唯一允许的替代写法
+bannedWords:
+  - id: BW-01
+    pattern: 项目资料
+    reason: 空话来源，不可溯源
+    replacement: 具体文件相对路径#字段/小节（如 04_成果报告/现状分析报告#第三章）
+  - id: BW-02
+    pattern: 待补|待补充|待定|待确认
+    reason: 占位式空话（“待确认”仅允许用于标注模板旧口径差异，须同段出现“旧口径”或“模板”）
+    replacement: （初步判定：<结论>；推断依据：<材料或公开区间>；置信度：中）
+  - id: BW-03
+    pattern: 据测算|据估算|经测算|经估算
+    reason: 无依据的测算口吻；测算必须有来源行
+    replacement: 来源：<引擎JSON>#<字段> 或 计算过程见 8.1.2
+  - id: BW-04
+    pattern: 网络资料
+    reason: 太粗；政策类必须给政策名称 + 发文机关 + 年份/文号
+    replacement: 《关于…的意见》（发文机关，年份，文号）
+  - id: BW-05
+    pattern: 无|暂无
+    reason: 作为来源行时是空话
+    replacement: 该指标不适用（说明原因）或 （资料缺失：…，见缺项表）
+  - id: BW-06
+    pattern: 我们认为|我觉得|应该是
+    reason: 主观口吻，评审不可核
+    replacement: 客观陈述 + 来源行
+  - id: BW-07
+    pattern: 大概|左右|约莫
+    reason: 金额/比率用模糊限定词，掩盖精度
+    replacement: 精确到约定小数位；确需区间写“区间范围：a–b（口径：…）”
+  - id: BW-08
+    pattern: 非常|十分|极大地|显著地
+    reason: 形容词堆砌，无信息增量
+    replacement: 用数字或对比基准表达程度
+  - id: BW-09
+    pattern: TODO|XXX|\{\{|\}\}
+    reason: 占位符，成品 0 残留
+    replacement: （资料缺失：…，见缺项表）
+  - id: BW-10
+    pattern: 若干|部分|一些
+    reason: 指代不明，无法核验
+    replacement: 给出数量/比例/清单
+  - id: BW-11
+    pattern: 自行整理|自行整理所得|结合报告总结|结合报告进行总结
+    reason: 空话来源（T17 §2.4）
+    replacement: 具体文件#章节/字段
+  - id: BW-12
+    pattern: 参考市场|参考类似项目经验
+    reason: 单价/租金必须有可核依据（政府定价/调研记录/合同）
+    replacement: 政府定价文件（名称+文号）或 调研记录（文件名+日期）；确无一手数据时写「同类项目公开区间（具名来源，检索日期 YYYY-MM-DD；推断；置信度：低）」
+  - id: BW-13
+    pattern: 专家判断|专家经验
+    reason: 无记录的专家判断不可复核
+    replacement: 专家打分表（文件名）+ 标度法 + CR 值
+  - id: BW-14
+    pattern: 依据本建议书模板编制|依据模板
+    reason: 自指依据，评审不可接受
+    replacement: 具体规范/政策/资料（具名）
+bannedWordScope: 成品正文、章稿 md、图表题注、来源行；引用的政策原文标题除外
+bannedWordScopeOverride:
+  BW-05: source
+  BW-02: template-stale-only
+  note: BW-05 只在来源行判 fail；“无风险”“无遮挡”等正文用法不误杀；BW-02 的“待确认”仅在标注模板旧口径时豁免
+
+# ---------------------------------------------------------------- 4. 分章稿结构与块级语法（硬接口，见 docs/章节skill约定.md）
+markdownStructure:
+  chapterHeading: 分章稿不写 H1（章标题由 compose 生成）；小节标题用 ##/###/#### + 编号 + 模板标题逐字
+  headingRule: 标题必须与 45 个模板标题逐字一致（含括号与顿号），不新增/不改字
+  paragraphRule: 普通文本一行一段，段间空一行；结论段在前
+  sourceRule: 每节末尾（或每个数据段后）一行“来源：<项目根相对路径>#<字段>”
+  missingRule: 干净版正文不写缺口；缺料先给「初步判定＋推断依据＋置信度」，缺口同步到 缺项表.md（不阻断成稿）
+  blockOrder: 段落 → 来源行 → 表格块 → 图块；表格/图自带 source，不重复写来源行
+  forbid: ["H1 标题", "占位符 {{}}/TODO", "待补", "空话来源", "盘符绝对路径", "真实项目名"]
+
+blockSyntax:
+  table:
+    open: '<!--table id="T8-9" caption="全部投资财务指标计算结果汇总" source="05_过程/投资决策/财务测算.json#indicators"-->'
+    body: markdown 表格（表头行 + |---|---| 分隔行 + 数据行）
+    close: '<!--/table-->'
+    rules:
+      - id 全书唯一，格式 T<章号>-<章内序号>（如 T8-9），与契约 tablesIndex.id 一致
+      - caption 为表题正文（不带“表 8-9”编号，编号由 render 生成）
+      - source 必填，格式“<项目根相对路径>#<字段>”；多来源用“；”分隔
+      - 数字不带千分位；比率写百分数数值（8.15 表示 8.15%）；表头单位列已标 % 的列不再带 %
+      - 表位 1/2 数值列统一“两位小数、不带 %”；表位 2 表头写“计算结果（资本金）”
+  figure:
+    open: '<!--figure id="F8-1" type="line" caption="累计净现金流量曲线" source="05_过程/投资决策/财务测算.json#cashflows.allInvestment.cumulative"-->'
+    body: "单行 JSON：{\"labels\": [...], \"series\": [{\"name\": \"...\", \"values\": [...]}], \"unit\": \"万元\"}"
+    close: '<!--/figure-->'
+    rules:
+      - type 取值 bar / line / stackedBar / pie（框图/流程/甘特等用 bar 或 line 近似并注明）
+      - id 全书唯一，格式 F<章号>-<章内序号>，与契约 figuresIndex.id 一致
+      - caption 为图题正文（不带“图 8-1”编号）
+      - source 必填；图必须可由此 JSON 生成，禁止“示意图/无数据”占位
+  sourceLine:
+    format: "来源：<项目根相对路径>#<字段或小节>"
+    tableFormat: "表格块内 source 属性，不另写来源行"
+    separator: "；"
+    fieldSeparator: "#"
+  missingItem:
+    format: "（初步判定：<结论>；推断依据：<材料或公开区间>；置信度：中；区间：a～b）"
+    extra: 缺口只写入 05_过程/投资决策/缺项表.md（不进正文）；需留痕时用 --edition gap
+
+# ---------------------------------------------------------------- 5. 来源行写法
+sourceLine:
+  format: "来源：<文件相对路径>#<字段或小节>"
+  tableFormat: "表格块 source 属性：<文件相对路径>#<字段>；多来源用“；”分隔"
+  figureFormat: "图块 source 属性：<文件相对路径>#<字段>"
+  rules:
+    - 每节至少 1 条来源行；每个数据段后都要有来源行
+    - 来源必须具体到“文件 + 字段/小节”，不得只写文件名或“项目资料/网络资料/无”
+    - 一行可写多个来源，用“；”分隔；主来源在前
+    - 路径用项目根相对路径，不写盘符/绝对路径
+    - 不写真实项目名，项目名写“本项目”
+    - 上游报告引用到章/节：如 04_成果报告/现状分析报告#第三章
+    - 派生数据引用到引擎 JSON 字段：如 05_过程/投资决策/财务测算.json#indicators.firrAll
+  allowedKinds:
+    - 引擎JSON（财务测算/投资估算/财务输入/方案比选/AHP 权重表与评分表/低空现状指标）
+    - 上游报告（现状分析报告，到章/节）
+    - 用户槽位（槽位.json#slots.<key>）
+    - 模板与规范资产（模板/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx、规则/财务口径.yaml）
+    - 政策文件（名称 + 发文机关 + 年份/文号 + 条款）
+  forbidden:
+    - 项目资料
+    - 网络资料（未给政策名称/发文机关/年份）
+    - 无
+    - 自行整理 / 结合报告总结
+    - 参考市场 / 专家判断（无记录）
+    - 盘符或绝对路径
+  examples:
+    - 来源：05_过程/投资决策/投资估算.json#totalInvestment
+    - 来源：05_过程/投资决策/财务测算.json#indicators.firrAll
+    - 来源：04_成果报告/现状分析报告#第三章
+    - 来源：05_过程/投资决策/槽位.json#slots.functionalPosition
+    - 来源：05_过程/投资决策/财务测算.json#indicators.firrAll；skills/cardo-invest-spec/规则/财务口径.yaml#indicators
+    - 来源：项目资料/《XX市城市更新管理办法》#第三章第十二条（文号：XX政办发〔2024〕X号）
+  emptySourceWords: [项目资料, 网络资料, 无, 暂无, 待补, 自行整理, 结合报告总结, 参考市场, 专家判断]
+
+# ---------------------------------------------------------------- 6. 图表题注
+captions:
+  table:
+    numberFormat: 表 <章>-<序>
+    numbering: 按成品出现顺序章内从 1 连续编号（表位 1/2 = 表 8-9/表 8-10；表位 3–6 = 表 9-3…表 9-6）
+    position: 表上方，另起一行，居中
+    format: 表 8-9 全部投资财务指标计算结果汇总
+    requireSource: 表下方必须有“数据来源：…”一行（md 阶段写在块 source 属性）
+    tableStyle: 三线表（顶线/表头线/底线，无竖线）；数值右对齐，单位写表头
+  figure:
+    numberFormat: 图 <章>-<序>
+    numbering: 按成品出现顺序章内从 1 连续编号
+    position: 图下方，居中
+    format: 图 8-1 累计净现金流量曲线
+    requireSource: 图下方必须有“数据来源：…”一行（md 阶段写在块 source 属性）
+    requireAxis: 必须给横轴/纵轴/单位/系列（数据 JSON 的 labels/series/unit）
+  crossReference:
+    format: 正文引用写“见表 8-9”“见图 8-1”“见 8.1.5.1”
+    rule: 引用编号必须已存在；不得引用未编号图表
+
+# ---------------------------------------------------------------- 7. 单位与数字
+units:
+  amount:
+    unit: 万元
+    decimals: 2
+    example: 6,720.60
+  ratio:
+    unit: "%"
+    decimals: 2
+    example: 8.15
+  years:
+    unit: 年
+    decimals: 2
+    example: 14.61
+  area:
+    unit: 平方米
+    decimals: 2
+    example: 5,000.00
+  weight:
+    unit: ""
+    decimals: 4
+    example: 0.4000
+  score:
+    unit: 分
+    decimals: 2
+    example: 7.35
+  multiple:
+    unit: 倍
+    decimals: 2
+    example: 5.89
+  rule: 同一指标全文同一单位；表内单位写在表头，正文首次出现写单位，其后可省略
+numbers:
+  source: 数字一律来自上游引擎 JSON；章节脚本禁止自行计算财务指标（只做格式化与引用）
+  consistency: 跨章引用同一指标必须完全相同（含小数位）；容差按 表格契约.yaml#tolerance
+  rounding: ROUND_HALF_UP；金额/比率/年数两位，权重四位，不做二次取整
+  thousandSeparator: 千分位仅用于正文与表格展示，JSON 内不写千分位
+  labeledMetrics: 每个指标必须标“税前/税后”“全部投资/资本金”
+  forbidden: [编造数字, 用'约/左右'掩盖精度, 无来源行的数字, 与上游 JSON 不一致的展示值]
+
+# ---------------------------------------------------------------- 8. 模板旧值禁令与方向守卫（D-03/07/08/09）
+templateStaleValues:
+  note: 模板示例值不得照抄；若必须引用以说明差异，须同段出现“旧口径/模板默认/待确认”之一
+  values:
+    - pattern: 计算期(?:取定)?\s*32\s*年|32\s*年
+      reason: 模板计算期 32 年（3+29）；引擎计算期以 period.totalYears 为准（示例 33 年）
+      replacement: 计算期 33 年（建设期 3 年 + 运营期 30 年）
+    - pattern: 运营期\s*29\s*年
+      reason: 模板运营期 29 年；引擎 operationYears=30
+      replacement: 运营期 30 年
+    - pattern: 后\s*19\s*年
+      reason: 模板按运营期 29 年推出的分段；引擎运营期 30 年 → 前 10 年/后 20 年
+      replacement: 后 20 年
+    - pattern: 租赁(?:收入)?[^。；]{0,12}11\s*%
+      reason: FD-03 租赁增值税 11% 为旧税率（现行 9%）；按财务口径保留并显式标注旧口径
+      replacement: 按口径 11%（旧口径，待确认）
+    - pattern: 土地使用税[^。；]{0,10}4\.5\s*元
+      reason: FD-01 公式 4.5 元/㎡ vs 口径 8 元/㎡
+      replacement: 土地使用税 8 元/平方米
+    - pattern: 方向[一二三]：老旧(?:街区|厂区|小区)项目
+      reason: 模板三方向话术；本项目只适用一个方向，其余删除
+      replacement: 按本项目方向重写
+directionGuard:
+  rule: 只保留本项目方向的改造内容与必要性话术；其他方向关键词 0 命中（适用性声明除外）
+  directionKeywords:
+    老旧街区项目: [老旧厂区, 老旧小区]
+    老旧厂区项目: [老旧街区, 老旧小区]
+    老旧小区项目: [老旧街区, 老旧厂区]
+  exemptionPattern: 不适用|不涉及|方向差异|本项目方向|仅适用于
+
+# ---------------------------------------------------------------- 9. 结构与篇幅
+structure:
+  headingPolicy: H1 章 10 个（compose 生成）；H2 26 / H3 12 / H4 7 共 45 个，标题文案逐字一致
+  syntheticSections: CH-03-01、CH-10-01 为取料锚点，不渲染标题（renderHeading false），内容并入章正文
+  sectionParagraphMin: 2
+  conclusionParagraph: 每节第一段为结论段（结论先行）
+  closingParagraph: 章末最后一段收口到“判断/建议”，不重复前文
+  wordCount:
+    basis: 中文正文汉字数（count_cn_words），不含标题、表格、来源行、图块 JSON
+    sectionMinRule: 逐节下限见 章节契约 v2（wordMin = 本节自身正文，不含下级小节）
+    chapterMinDefault: 1200
+    chapterMinCH10: 400
+    totalMin: 21400
+    totalFloor: 20000
+  emptySourceCount: 0
+  tableCountMin: 20
+  figureCountMin: 6
+  mandatoryTables: 35
+  mandatoryFigures: 8
+wordCountBasis: count_cn_words(text) 统计 CJK 汉字；标题/表格/来源行/图块/注行不计；口径见 scripts/writing.py
+
+# ---------------------------------------------------------------- 10. 必答问题命中词表
+keyQuestionLexicon:
+  note: ACC-KEYQ 的判定词表；命中 0 个 → fail，不足一半 → warn，命中一半及以上 → ok
+  terms:
+    - 总投资
+    - 建设投资
+    - 建设期利息
+    - 资本金
+    - 专项融资
+    - 政策性补助
+    - 工程费用
+    - 工程建设其他费
+    - 预备费
+    - 计算期
+    - 建设期
+    - 运营期
+    - 折现率
+    - 基准收益率
+    - 财务内部收益率
+    - 财务净现值
+    - 静态投资回收期
+    - 利息备付率
+    - 偿债备付率
+    - 资本金净利润率
+    - 总投资收益率
+    - 经营成本
+    - 折旧
+    - 摊销
+    - 增值税
+    - 所得税
+    - 税金及附加
+    - 营业收入
+    - 现金流
+    - 累计净现金流
+    - 敏感性
+    - 临界点
+    - 政策
+    - 规划
+    - 必要性
+    - 现状
+    - 建筑密度
+    - 容积率
+    - 绿化覆盖率
+    - 四至
+    - 用地面积
+    - 建筑面积
+    - 更新范围
+    - 改造内容
+    - 工程量
+    - 时序
+    - 阶段
+    - 组织
+    - 职责
+    - 运营
+    - 收益
+    - 业态
+    - 定位
+    - 客流
+    - 出租率
+    - 租金
+    - 单价
+    - 数量
+    - 指标
+    - 权重
+    - 判别矩阵
+    - 一致性
+    - 准则层
+    - 指标层
+    - 目标层
+    - 综合得分
+    - 评级
+    - 打分
+    - 来源
+    - 缺项
+    - 风险
+    - 隐患
+    - 招商
+    - 停车
+    - 广告
+    - 充电桩
+    - 外摆
+    - 收入项
+    - 成本结构
+    - 偿债
+    - 缺口
+    - 资金结构
+    - 投资强度
+
+# ---------------------------------------------------------------- 11. 段落模板（写作原语对应）
+paragraphTemplates:
+  conclusionSection: [结论句（含数字/事实）, 依据（1-2 句，展开数字或机制）, 影响/建议（1 句）]
+  analysisSection: [判断, 证据（数字/事实/对比）, 机制或归因, 对本项目的影响]
+  dataSection: [口径说明, 数据与结构, 关键变化或占比, 判断]
+  problemSection: [问题现象, 量化证据, 影响对象与程度, 对应改造方向]
+  recommendationSection: [结论, 理由（分点）, 前置条件与风险, 下一步动作]
+  sourceRule: 每个段落后面都要跟一行“来源：…”
+
+# ---------------------------------------------------------------- 12. 自检目录（与 章节契约.yaml#acceptanceCatalog、T17 §8 对齐）
+checks:
+  - id: A-01
+    desc: 45 标题覆盖（编号+文案逐字一致，缺失/改字=0）
+    level: fail
+  - id: A-02
+    desc: 字数——每章 ≥ 契约 wordMin；全书 ≥21,400（门槛 20,000）
+    level: fail
+  - id: A-03
+    desc: 节字数——每节 ≥ 契约 wordMin（本节自身正文）
+    level: fail
+  - id: A-04
+    desc: 表数量——表位 1–6 齐全 + 必备表 35 张齐全；全书 ≥20
+    level: fail
+  - id: A-05
+    desc: 图数量——必备图 8 张齐全；全书 ≥8；每图有 labels/series/unit/source
+    level: fail
+  - id: A-06
+    desc: 来源行——每节 ≥1 条“文件#字段”；空话来源 = 0
+    level: fail
+  - id: A-07
+    desc: 数字一致——1.3 vs 7.1/8/9 同数；与引擎 JSON 容差内一致
+    level: fail
+  - id: A-08
+    desc: 口径一致——计算期/折现率/税率/单位/小数位跨章一致；税前税后标注齐全
+    level: fail
+  - id: A-09
+    desc: 财务完整性——10 项指标；敏感性 ≥3 因素；ICR/DSCR 注明聚合口径
+    level: fail
+  - id: A-10
+    desc: AHP 完整性——16 指标；表位 3/4 正互反；表位 5/6 权重和=1；CR 有值或标注临时
+    level: fail
+  - id: A-11
+    desc: 模板旧值 0 命中（32年/运营期29年/后19年/11%/4.5元/㎡），或同段标注旧口径
+    level: fail
+  - id: A-12
+    desc: 未选方向话术 0 命中（适用性声明除外）
+    level: fail
+  - id: A-13
+    desc: 占位符/“待补” 0 残留
+    level: fail
+  - id: A-14
+    desc: 表头——表位 1–6 列名与表格契约一致；表位 2 写“资本金”
+    level: fail
+  - id: A-15
+    desc: 断链——正文引用的表/图/附件均存在
+    level: warn

@@ -1,0 +1,334 @@
+schema: cardo/invest-chapter-contract/v2
+version: 2
+extractedAt: '2026-10-22'
+updatedAt: '2026-10-23'
+producer: cardo-invest-spec/T3+T18
+source:
+  templateAsset: skills/cardo-invest-spec/assets/templates/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx
+  templateSha256: f8f97d8bcd317007d2d76e1871f319797fe7b8e297ee7a48365bb5dfafce7b10
+  originalSha256: 395b0a47ab448eac21c1c52cdbe7014db24e68b22c001c34eb6839e2751d026a
+  originalChapters: 10
+  originalHeadingCensus: 55 个标题 = H1×10 + H2×26 + H3×12 + H4×7
+  chapterRequirements: docs/模板逐章要求.md
+  chapterSkillConvention: docs/章节skill约定.md
+  note: 模板正文 34 处“数据来源”字样（28 标准 + 6 非标准）已全部转为 promptRules；成品 0 残留由全局断言保证
+units:
+  chapterCount: 10
+  tableSlotCount: 6
+  promptLineCount: 34
+  templateHeadingCount: 45
+  sectionNodeCount: 47
+  syntheticSectionCount: 2
+  tableIndexCount: 42
+  mandatoryTableCount: 35
+  optionalTableCount: 7
+  figureIndexCount: 12
+  mandatoryFigureCount: 8
+  conditionalFigureCount: 3
+  tableCountMin: 20
+  figureCountMin: 6
+  wordTotalMin: 21400
+  wordTotalFloor: 20000
+gates:
+  chapterScope: G-invest-2
+  promptLinePolicy: 提示行只作为取料规则，绝不出现在成品
+  writingScope: G-invest-7
+  writingPolicy: 语气/术语/禁用词/来源行/块级语法/题注只在 写作规范.yaml 定义，本契约只引用不复制
+writingProfile:
+  rulesFile: 写作规范.yaml
+  writingLib: scripts/writing.py
+  checker: scripts/check_report_v2.py
+  fragmentFormat: markdown + 块级 HTML 注释语法
+  fragmentPath: 05_过程/投资决策/分章/CH-XX.md
+  blockSyntaxRef: 写作规范.yaml#blockSyntax
+  contractRef: skills/cardo-invest-spec/规则/章节契约.yaml
+  chapterHeadingPolicy: 分章稿不写 H1（compose 生成）；小节标题
+  numbering:
+    table: 表 <章>-<章内出现序号>
+    figure: 图 <章>-<章内出现序号>
+    rule: 编号按成品出现顺序连续；章内不跳号、不重号
+  wordMinSemantics: wordMin = 该节自身正文中文字符数（不含下级小节/表格/来源行/标题）；章 wordMin = 各节之和
+  paragraphPlanSemantics: paragraphPlan 是有序段落意图清单，不是逐段模板；顺序可变通，段数不得少于 length-1
+  requiredQuestionsSemantics: 必答问题必须在小节正文里被明确回答；允许换句式，不允许漏答；答不出写（资料缺失：…）
+  acceptanceSemantics: acceptance 里的 id 指向 acceptanceCatalog；fail 级不过则该小节判 fail
+  optionalSemantics: optionalTables/optionalFigures 为材料充足时升级的选做项，不计入门槛
+  dataPolicy: 数字只读上游引擎 JSON；章节脚本禁止自行计算财务指标（财务口径.yaml 为唯一口径）
+  wordCountPolicy: count_cn_words() 统计中文汉字，去标题/表格/来源行/图块；实现见 scripts/writing.py
+globalAssertions:
+- id: CHK-INV-1
+  desc: 一级标题数量=10 且顺序与契约 chapters 一致
+  severity: fail
+- id: CHK-INV-2
+  desc: 表位 1–6 齐全且表头与表格契约一致
+  severity: fail
+- id: CHK-INV-3
+  desc: 成品不含“数据来源”提示行（0 残留），且契约 34 条 promptRules 每条已映射到 section
+  severity: fail
+- id: CHK-INV-4
+  desc: 成品不含占位符（双花括号/待补/TODO/XXX）
+  severity: fail
+- id: CHK-INV-5
+  desc: 成品与插件资产不含真实项目名（项目级扫描 0 命中）
+  severity: fail
+- id: CHK-INV-6
+  desc: 成品与插件文本不含盘符/UNC/用户目录绝对路径
+  severity: fail
+- id: CHK-INV-7
+  desc: 表位 1/2 指标数字/行名/单位与 财务测算.json 一致（成品展示容差 0.04pp/0.01 万元/0.01 年；锚点容差 0.5%/1 万元另见财务口径）
+  severity: fail
+- id: CHK-INV-8
+  desc: 每章有来源映射（sourceMap，≥10 章），断链 0（实现按 fail 校验，严于本 warn 级）
+  severity: warn
+chapters:
+- id: CH-05
+  number: 5
+  title: 项目建设范围、改造内容与建设方案
+  level: 1
+  required: true
+  goal: 技术方案章，评审看“范围—内容—工程量—投资”四者闭合；5.3 是全章最大工作量
+  audience:
+  - 评审
+  - 城投
+  - 政府
+  wordMin: 3100
+  templateParagraphs:
+  - 52
+  - 53
+  - 54
+  - 55
+  - 56
+  - 57
+  - 58
+  - 185
+  - 186
+  - 187
+  - 188
+  - 189
+  requiredQuestions:
+  - Q1：5.1 面积与 1.1/7.1 一致吗
+  - Q2：5.3 每项有工程量且对应投资科目吗
+  - Q3：5.4 时序与 7.2 分年资金一致吗
+  - Q4：是否只写本项目方向，没有模板三方向话术
+  paragraphPlan:
+  - P1 结论段（5.1）：范围一句话 + 改造内容总量 + 时序阶段数
+  - P2 四至与面积、权属与保护约束
+  - P3 总体思路（5.2）：留改拆比例 + 三类框架
+  - P4 分项改造（5.3）：三类逐项 + 工程量 + 对应投资
+  - P5 时序（5.4）：三阶段 + 里程碑 + 资金匹配
+  requiredTables:
+  - T5-1
+  - T5-2
+  - T5-4
+  optionalTables:
+  - T5-3
+  requiredFigures:
+  - F5-2
+  optionalFigures:
+  - F5-1
+  acceptance:
+  - ACC-STRUCT
+  - ACC-WORD
+  - ACC-KEYQ
+  - ACC-PARAS
+  - ACC-TABLE
+  - ACC-FIGURE
+  - ACC-SOURCE
+  - ACC-NUM
+  - ACC-TERM
+  - ACC-NOBAN
+  - ACC-STALE
+  - ACC-DIRECTION
+  antiPatterns:
+  - 注水：照抄模板街区/厂区/小区三套全部话术
+  - 罗列：只有内容没有工程量
+  - 闭合：工程量与 7.1 投资对不上
+  - 残留：把模板“其他，如有可手动添加”写进正文
+  - 主次：不分基础/完善/提升，一大段平铺
+  sections:
+  - id: CH-05-01
+    number: '5.1'
+    title: 更新范围界定
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 更新范围界定
+    goal: 四至+面积+权属与保护约束四段，说明范围与调研范围一致性及对投资的影响
+    audience:
+    - 评审
+    - 政府
+    wordMin: 450
+    requiredQuestions:
+    - Q1：四至边界、总用地面积、改造现状建筑面积各多少（与 1.1、第 3 章一致）
+    - Q2：更新范围与调研范围是否一致，不一致的差异是什么
+    - Q3：范围内权属、用地性质、历史保护要求（文保单位/历史建筑/传统风貌建筑）如何
+    - Q4：范围如何影响工程量与投资（边界为何这样切）
+    paragraphPlan:
+    - P1 范围结论（四至+面积）
+    - P2 四至与面积（含来源）
+    - P3 权属与保护约束
+    - P4 范围确定理由与对投资的影响
+    requiredTables:
+    - T5-1
+    optionalTables: []
+    requiredFigures: []
+    optionalFigures:
+    - F5-1
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-SOURCE
+    - ACC-NUM
+    source:
+      kind: upstream_file
+      from: 财务输入.json#project.area + 现状分析报告#调研范围
+      missing: gap
+  - id: CH-05-02
+    number: '5.2'
+    title: 更新改造总体思路
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 更新改造总体思路
+    goal: 留改拆比例与三类改造框架，策略依据挂到 3 章问题与 4.2 定位
+    audience:
+    - 评审
+    - 城投
+    wordMin: 450
+    requiredQuestions:
+    - Q1：总体策略是什么（留改拆比例、微更新/功能置换/拆除重建）
+    - Q2：策略依据是什么（结构安全、保护要求、投资能力、收益）
+    - Q3：与第 3 章问题、4.2 定位、9.3 方案比选是什么关系
+    - Q4：分几类改造（基础/完善/提升）、优先级如何
+    paragraphPlan:
+    - P1 策略结论（留改拆比例）
+    - P2 三类改造框架
+    - P3 策略依据
+    - P4 与后续章节接口
+    requiredTables: []
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-SOURCE
+    source:
+      kind: slot_or_upstream
+      from:
+      - 用户槽位
+      - 现状分析报告#5.2 总体更新思路
+      missing: gap
+      note: Lead D-02：promptRule R-15（模板段落 56）实属 5.2，已改挂本节
+  - id: CH-05-03
+    number: '5.3'
+    title: 分项改造内容
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 分项改造内容
+    goal: 三类改造逐项给工程量与对应投资，可被 7.1 逐项复算；分类序号用（一）（二）（三）正文，不新增标题
+    audience:
+    - 评审
+    - 内部
+    wordMin: 1700
+    requiredQuestions:
+    - Q1：分几类（基础/完善/提升）、共几项、每项改什么
+    - Q2：每项工程量多少（面积/长度/数量/部数），来源是无人机、测量还是手动
+    - Q3：每项对应投资估算哪个科目、多少钱（与 7.1 闭合）
+    - Q4：哪些项按项目方向不适用（街区/厂区/小区差异）
+    - Q5：哪些工程量缺失（gap）、如何补
+    paragraphPlan:
+    - P1 总体框架（三类 N 项 + 工程量口径）
+    - P2 基础类（逐项：建设内容+工程量+对应费用）
+    - P3 完善类
+    - P4 提升类
+    - P5 不适用项与缺项说明
+    - P6 与 7.1 对账说明
+    requiredTables:
+    - T5-2
+    optionalTables:
+    - T5-3
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-SOURCE
+    - ACC-NUM
+    - ACC-DIRECTION
+    source:
+      kind: upstream_or_manual
+      from:
+      - 无人机勘测/测量输入
+      - 用户手动输入
+      missing: gap
+  - id: CH-05-04
+    number: '5.4'
+    title: 建设时序安排
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 建设时序安排
+    goal: 三阶段+里程碑+投资与资金匹配，给出关键路径与制约因素
+    audience:
+    - 城投
+    - 评审
+    wordMin: 500
+    requiredQuestions:
+    - Q1：分几个阶段、各阶段起止时间与工期
+    - Q2：各阶段主要工作与里程碑（立项/开工/竣工/开业）
+    - Q3：各阶段投资与资金来源如何匹配（与 7.2 同值）
+    - Q4：关键路径与制约因素是什么（民意征询、审批、管线迁改、季节）
+    paragraphPlan:
+    - P1 总工期与阶段结论
+    - P2 前期筹备
+    - P3 分批施工
+    - P4 运营培育
+    - P5 关键路径与风险
+    requiredTables:
+    - T5-4
+    optionalTables: []
+    requiredFigures:
+    - F5-2
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-FIGURE
+    - ACC-SOURCE
+    - ACC-CAPTION
+    source:
+      kind: slot
+      from: slots.schedule
+      missing: gap
+promptRules:
+- id: R-15
+  paragraph: 56
+  section: CH-05-02
+  text: （数据来源：《现状分析报告》5.2小节内容）
+  kind: upstream_file
+  from: 现状分析报告
+  locator: 5.2
+  missing: gap
+  retargetedBy: D-02
+  retargetNote: 模板段落 56 实位于 5.2 更新改造总体思路标题之后（T17 §6 D-02），v1 误挂 CH-04-04
+- id: R-16
+  paragraph: 58
+  section: CH-05-03
+  text: （数据来源：可结合如下内容选择项目适用的改造内容，改造工程量结合无人机勘测和测量输入数据填写，若前两项无法覆盖的工程量需手动填写。）
+  kind: upstream_or_manual
+  from:
+  - 无人机勘测/测量输入
+  - 用户手动输入
+  missing: gap
+- id: R-17
+  paragraph: 186
+  section: CH-05-04
+  text: 建设时序包括如下内容，数据来源需手动输入。
+  kind: slot
+  from: slots.schedule
+  missing: gap

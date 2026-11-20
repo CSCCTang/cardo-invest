@@ -1,0 +1,44 @@
+schema: cardo-invest/verification-rules/v1
+version: 1
+scope: 08-验证与边界（独立复算与边界扫描）
+note: >
+  本文件是 08 的口径说明书；独立验证脚本不读取本文件解析，而是把同样的常量写死在
+  independent_verify.py 顶部（避免与引擎共用解析路径，保持独立）。改口径必须两处同改并全链回归。
+
+caliber:
+  investment:
+    totalInvestment: 工程费 + 工程建设其他费 + 预备费 + 建设期利息
+    contingency: (工程费 + 其他费) × 预备费率
+    constructionInterest: Σ(当年提款 × 年利率 × 0.5)，不计复利，只对当年提款计息
+    fundingBalanceToleranceWan: 1
+  finance:
+    discountFormula: CFt / (1 + r)^t，t 从 1 起
+    irr: 二分法求根，多根取最接近 0.10
+    payback: 累计首次转正年 − 1 + |上年累计| / 当年净现金流
+    roe: 运营期年均净利润 / 资本金
+    roi: 运营期年均息税前利润 / 总投资
+    icr: 运营期 ΣEBIT / Σ利息
+    dscr: (ΣEBITDA − Σ所得税) / Σ(还本 + 付息)
+  ahp:
+    rule: 只读不重算；权重合计≈1，且与 输入文件/04-上游交接-json/权重表.json 逐项一致
+  scheme:
+    rule: 3 套同源同口径，7 维度齐全；推荐方案 = 得分排名第 1
+    firrReasonableRange: [-0.05, 0.60]
+
+tolerance:
+  deliverable:
+    ratioPp: 0.04
+    amountWan: 0.01
+    years: 0.01
+  anchor:
+    ratioPct: 0.5
+    amountWan: 1
+    years: 0.5
+
+boundary:
+  inputAllowed: [".docx", ".doc", ".pdf", ".xlsx", ".xls", ".pptx"]
+  inputJsonSubdir: 04-上游交接-json
+  outputAllowed: [".docx", ".xlsx", ".pdf"]
+  skillAllowed: [".py", ".md", ".yaml", ".yml"]
+  skillAssetSubdir: 模板
+  forbiddenPatterns: ["盘符绝对路径", "真实项目名/地名", "{{占位符}}", "待补", "（数据来源："]

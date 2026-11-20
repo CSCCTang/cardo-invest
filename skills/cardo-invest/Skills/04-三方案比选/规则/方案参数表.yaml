@@ -1,0 +1,37 @@
+schema: cardo/scheme-params/v1
+version: 1
+note: "三方案默认参数表（口径唯一来源）。系数值与上游 gen_schemes/0.3.0 代码内常量逐项一致（仅搬位置，未改口径）；用户覆盖见 --params / 财务参数.json。"
+modes:
+  - id: S1
+    name: 拆除重建
+    note: 高投入、长周期、新增载体
+    requiredKeyParams: [容积率上限, 拆除单价, 建安单价, 补贴]
+    factors:
+      costFactor: "1.35"
+      revenueFactor: "1.45"
+      subsidyFactor: "0.8"
+      periodYears: 3
+  - id: S2
+    name: 微更新
+    note: 低投入、短周期、租金提升
+    requiredKeyParams: [改造单价, 外立面比例, 管网比例, 补贴]
+    factors:
+      costFactor: "0.55"
+      revenueFactor: "0.75"
+      subsidyFactor: "1.2"
+      periodYears: 2
+  - id: S3
+    name: 功能置换
+    note: 中投入、业态升级
+    requiredKeyParams: [功能配比, 改造单价, 腾退补偿]
+    factors:
+      costFactor: "0.8"
+      revenueFactor: "1.1"
+      subsidyFactor: "1"
+      periodYears: 2
+defaultWeights:
+  投资经济: 0.4
+  风险可控: 0.3
+  现状情况: 0.2
+  规划合规: 0.1
+defaultWeightsNote: "AHP 缺失时的显式默认权重（上游 gen_schemes/0.3.0 DEFAULT_WEIGHTS 逐项一致）；产物须标 temporary:true 并注 待 AHP 插件输出替换。"

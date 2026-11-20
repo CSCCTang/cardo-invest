@@ -1,0 +1,241 @@
+schema: cardo/invest-chapter-contract/v2
+version: 2
+extractedAt: '2026-10-22'
+updatedAt: '2026-10-23'
+producer: cardo-invest-spec/T3+T18
+source:
+  templateAsset: skills/cardo-invest-spec/assets/templates/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx
+  templateSha256: f8f97d8bcd317007d2d76e1871f319797fe7b8e297ee7a48365bb5dfafce7b10
+  originalSha256: 395b0a47ab448eac21c1c52cdbe7014db24e68b22c001c34eb6839e2751d026a
+  originalChapters: 10
+  originalHeadingCensus: 55 个标题 = H1×10 + H2×26 + H3×12 + H4×7
+  chapterRequirements: docs/模板逐章要求.md
+  chapterSkillConvention: docs/章节skill约定.md
+  note: 模板正文 34 处“数据来源”字样（28 标准 + 6 非标准）已全部转为 promptRules；成品 0 残留由全局断言保证
+units:
+  chapterCount: 10
+  tableSlotCount: 6
+  promptLineCount: 34
+  templateHeadingCount: 45
+  sectionNodeCount: 47
+  syntheticSectionCount: 2
+  tableIndexCount: 42
+  mandatoryTableCount: 35
+  optionalTableCount: 7
+  figureIndexCount: 12
+  mandatoryFigureCount: 8
+  conditionalFigureCount: 3
+  tableCountMin: 20
+  figureCountMin: 6
+  wordTotalMin: 21400
+  wordTotalFloor: 20000
+gates:
+  chapterScope: G-invest-2
+  promptLinePolicy: 提示行只作为取料规则，绝不出现在成品
+  writingScope: G-invest-7
+  writingPolicy: 语气/术语/禁用词/来源行/块级语法/题注只在 写作规范.yaml 定义，本契约只引用不复制
+writingProfile:
+  rulesFile: 写作规范.yaml
+  writingLib: scripts/writing.py
+  checker: scripts/check_report_v2.py
+  fragmentFormat: markdown + 块级 HTML 注释语法
+  fragmentPath: 05_过程/投资决策/分章/CH-XX.md
+  blockSyntaxRef: 写作规范.yaml#blockSyntax
+  contractRef: skills/cardo-invest-spec/规则/章节契约.yaml
+  chapterHeadingPolicy: 分章稿不写 H1（compose 生成）；小节标题
+  numbering:
+    table: 表 <章>-<章内出现序号>
+    figure: 图 <章>-<章内出现序号>
+    rule: 编号按成品出现顺序连续；章内不跳号、不重号
+  wordMinSemantics: wordMin = 该节自身正文中文字符数（不含下级小节/表格/来源行/标题）；章 wordMin = 各节之和
+  paragraphPlanSemantics: paragraphPlan 是有序段落意图清单，不是逐段模板；顺序可变通，段数不得少于 length-1
+  requiredQuestionsSemantics: 必答问题必须在小节正文里被明确回答；允许换句式，不允许漏答；答不出写（资料缺失：…）
+  acceptanceSemantics: acceptance 里的 id 指向 acceptanceCatalog；fail 级不过则该小节判 fail
+  optionalSemantics: optionalTables/optionalFigures 为材料充足时升级的选做项，不计入门槛
+  dataPolicy: 数字只读上游引擎 JSON；章节脚本禁止自行计算财务指标（财务口径.yaml 为唯一口径）
+  wordCountPolicy: count_cn_words() 统计中文汉字，去标题/表格/来源行/图块；实现见 scripts/writing.py
+globalAssertions:
+- id: CHK-INV-1
+  desc: 一级标题数量=10 且顺序与契约 chapters 一致
+  severity: fail
+- id: CHK-INV-2
+  desc: 表位 1–6 齐全且表头与表格契约一致
+  severity: fail
+- id: CHK-INV-3
+  desc: 成品不含“数据来源”提示行（0 残留），且契约 34 条 promptRules 每条已映射到 section
+  severity: fail
+- id: CHK-INV-4
+  desc: 成品不含占位符（双花括号/待补/TODO/XXX）
+  severity: fail
+- id: CHK-INV-5
+  desc: 成品与插件资产不含真实项目名（项目级扫描 0 命中）
+  severity: fail
+- id: CHK-INV-6
+  desc: 成品与插件文本不含盘符/UNC/用户目录绝对路径
+  severity: fail
+- id: CHK-INV-7
+  desc: 表位 1/2 指标数字/行名/单位与 财务测算.json 一致（成品展示容差 0.04pp/0.01 万元/0.01 年；锚点容差 0.5%/1 万元另见财务口径）
+  severity: fail
+- id: CHK-INV-8
+  desc: 每章有来源映射（sourceMap，≥10 章），断链 0（实现按 fail 校验，严于本 warn 级）
+  severity: warn
+chapters:
+- id: CH-07
+  number: 7
+  title: 投资估算与资金筹措方案
+  level: 1
+  required: true
+  goal: 回答“投多少、怎么算出来的、钱从哪来、什么时候到位”；三条硬约束：分项和=合计、构成公式成立、筹措合计=总投资
+  audience:
+  - 城投
+  - 评审
+  wordMin: 1900
+  templateParagraphs:
+  - 206
+  - 207
+  - 208
+  - 209
+  - 210
+  - 211
+  - 212
+  - 213
+  - 214
+  - 215
+  - 216
+  - 217
+  requiredQuestions:
+  - Q1：表 7-1 分项和=合计、占比和=100% 吗
+  - Q2：表 7-2 与表 5-4 是否同值
+  - Q3：表 7-3 三项之和=总投资吗
+  - Q4：融资条件与 8.2 一致吗
+  - Q5：单位造价是否与同类项目对比
+  paragraphPlan:
+  - P1 结论段（7.1）：总投资 + 四项构成 + 单位造价
+  - P2 工程费用、其他费、预备费、建设期利息逐项
+  - P3 合理性校验与 5.3 对账
+  - P4 资金结构（7.2）：资本金/融资/补助 + 到位节奏 + 缺口
+  requiredTables:
+  - T7-1
+  - T7-2
+  - T7-3
+  optionalTables:
+  - T7-4
+  requiredFigures: []
+  optionalFigures: []
+  acceptance:
+  - ACC-STRUCT
+  - ACC-WORD
+  - ACC-KEYQ
+  - ACC-PARAS
+  - ACC-TABLE
+  - ACC-FIGURE
+  - ACC-SOURCE
+  - ACC-NUM
+  - ACC-TERM
+  - ACC-NOBAN
+  - ACC-CAPTION
+  - ACC-STALE
+  antiPatterns:
+  - 口径：分项和≠合计、占比和≠100%（最常见）
+  - 重复：建设期利息既算进工程费又单列
+  - 编数：单价无依据、偏离市场
+  - 闭合：与 5.3 工程量对不上
+  - 含糊：拆迁安置口径不声明
+  - 空话：只写“总投资约 X 万元，详见附表”无构成分析
+  sections:
+  - id: CH-07-01
+    number: '7.1'
+    title: 项目总投资估算
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 项目总投资估算
+    goal: 总投资构成逐项可复算，分项和=合计、占比和=100%，并与 5.3 工程量对账
+    audience:
+    - 评审
+    - 城投
+    wordMin: 1000
+    requiredQuestions:
+    - Q1：总投资多少，构成（工程费用/工程建设其他费/预备费/建设期利息）各多少、占比
+    - Q2：每类费用怎么算（工程量×单价、取费基数×费率、定额依据）
+    - Q3：工程费与其他费分项是否与 5.3 闭合（每笔钱对应哪项改造）
+    - Q4：预备费率、建设期利息的假设（利率、半年计息）是什么
+    - Q5：是否含拆迁安置或土地费用（本项目声明不涉及的要有依据）
+    - Q6：与同类项目单位造价对比是否合理（元/平方米）
+    paragraphPlan:
+    - P1 结论：总投资 X 万元，构成为…
+    - P2 工程费用（分项+单价口径）
+    - P3 工程建设其他费
+    - P4 预备费与建设期利息
+    - P5 合理性校验（单位造价对比）+ 与 5.3 对账说明
+    requiredTables:
+    - T7-1
+    - T7-2
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-FIGURE
+    - ACC-SOURCE
+    - ACC-NUM
+    - ACC-CAPTION
+    source:
+      kind: computed
+      from: 投资估算.json
+      missing: gap
+  - id: CH-07-02
+    number: '7.2'
+    title: 资金筹措及使用方案
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 资金筹措及使用方案
+    goal: 三类资金来源合计=总投资，资本金比例合规，融资条件与 8.2 一致，分年到位有缺口分析
+    audience:
+    - 城投
+    - 评审
+    wordMin: 900
+    requiredQuestions:
+    - Q1：资金结构：资本金/专项融资/政策性补助各多少、占比
+    - Q2：资本金比例是否满足项目资本金制度（一般 ≥20%）
+    - Q3：融资条件（利率/期限/宽限期/还款方式）是什么，与 8.2 一致
+    - Q4：资金到位节奏与分年投资是否匹配，哪一年有缺口
+    - Q5：补助资金申报路径与不确定性（能否到位、何时到位）
+    paragraphPlan:
+    - P1 结构结论（资本金 X%、融资 Y%、补助 Z%）
+    - P2 自有资金
+    - P3 专项融资
+    - P4 政策性补助
+    - P5 分年到位与缺口分析
+    requiredTables:
+    - T7-3
+    optionalTables:
+    - T7-4
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-SOURCE
+    - ACC-NUM
+    - ACC-STALE
+    source:
+      kind: computed_or_slot
+      from:
+      - 投资估算.json#funding
+      - slots.funding
+      missing: gap
+promptRules:
+- id: R-20
+  paragraph: 217
+  section: CH-07-02
+  text: （数据来源：系统预设资金使用计划及筹措表，手动填写相应数据，自动计算占比）
+  kind: computed_or_slot
+  from:
+  - 投资估算.json#funding
+  - slots.funding
+  missing: gap

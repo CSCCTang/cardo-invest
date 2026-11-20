@@ -1,0 +1,349 @@
+schema: cardo/invest-chapter-contract/v2
+version: 2
+extractedAt: '2026-10-22'
+updatedAt: '2026-10-23'
+producer: cardo-invest-spec/T3+T18
+source:
+  templateAsset: skills/cardo-invest-spec/assets/templates/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx
+  templateSha256: f8f97d8bcd317007d2d76e1871f319797fe7b8e297ee7a48365bb5dfafce7b10
+  originalSha256: 395b0a47ab448eac21c1c52cdbe7014db24e68b22c001c34eb6839e2751d026a
+  originalChapters: 10
+  originalHeadingCensus: 55 个标题 = H1×10 + H2×26 + H3×12 + H4×7
+  chapterRequirements: docs/模板逐章要求.md
+  chapterSkillConvention: docs/章节skill约定.md
+  note: 模板正文 34 处“数据来源”字样（28 标准 + 6 非标准）已全部转为 promptRules；成品 0 残留由全局断言保证
+units:
+  chapterCount: 10
+  tableSlotCount: 6
+  promptLineCount: 34
+  templateHeadingCount: 45
+  sectionNodeCount: 47
+  syntheticSectionCount: 2
+  tableIndexCount: 42
+  mandatoryTableCount: 35
+  optionalTableCount: 7
+  figureIndexCount: 12
+  mandatoryFigureCount: 8
+  conditionalFigureCount: 3
+  tableCountMin: 20
+  figureCountMin: 6
+  wordTotalMin: 21400
+  wordTotalFloor: 20000
+gates:
+  chapterScope: G-invest-2
+  promptLinePolicy: 提示行只作为取料规则，绝不出现在成品
+  writingScope: G-invest-7
+  writingPolicy: 语气/术语/禁用词/来源行/块级语法/题注只在 写作规范.yaml 定义，本契约只引用不复制
+writingProfile:
+  rulesFile: 写作规范.yaml
+  writingLib: scripts/writing.py
+  checker: scripts/check_report_v2.py
+  fragmentFormat: markdown + 块级 HTML 注释语法
+  fragmentPath: 05_过程/投资决策/分章/CH-XX.md
+  blockSyntaxRef: 写作规范.yaml#blockSyntax
+  contractRef: skills/cardo-invest-spec/规则/章节契约.yaml
+  chapterHeadingPolicy: 分章稿不写 H1（compose 生成）；小节标题
+  numbering:
+    table: 表 <章>-<章内出现序号>
+    figure: 图 <章>-<章内出现序号>
+    rule: 编号按成品出现顺序连续；章内不跳号、不重号
+  wordMinSemantics: wordMin = 该节自身正文中文字符数（不含下级小节/表格/来源行/标题）；章 wordMin = 各节之和
+  paragraphPlanSemantics: paragraphPlan 是有序段落意图清单，不是逐段模板；顺序可变通，段数不得少于 length-1
+  requiredQuestionsSemantics: 必答问题必须在小节正文里被明确回答；允许换句式，不允许漏答；答不出写（资料缺失：…）
+  acceptanceSemantics: acceptance 里的 id 指向 acceptanceCatalog；fail 级不过则该小节判 fail
+  optionalSemantics: optionalTables/optionalFigures 为材料充足时升级的选做项，不计入门槛
+  dataPolicy: 数字只读上游引擎 JSON；章节脚本禁止自行计算财务指标（财务口径.yaml 为唯一口径）
+  wordCountPolicy: count_cn_words() 统计中文汉字，去标题/表格/来源行/图块；实现见 scripts/writing.py
+globalAssertions:
+- id: CHK-INV-1
+  desc: 一级标题数量=10 且顺序与契约 chapters 一致
+  severity: fail
+- id: CHK-INV-2
+  desc: 表位 1–6 齐全且表头与表格契约一致
+  severity: fail
+- id: CHK-INV-3
+  desc: 成品不含“数据来源”提示行（0 残留），且契约 34 条 promptRules 每条已映射到 section
+  severity: fail
+- id: CHK-INV-4
+  desc: 成品不含占位符（双花括号/待补/TODO/XXX）
+  severity: fail
+- id: CHK-INV-5
+  desc: 成品与插件资产不含真实项目名（项目级扫描 0 命中）
+  severity: fail
+- id: CHK-INV-6
+  desc: 成品与插件文本不含盘符/UNC/用户目录绝对路径
+  severity: fail
+- id: CHK-INV-7
+  desc: 表位 1/2 指标数字/行名/单位与 财务测算.json 一致（成品展示容差 0.04pp/0.01 万元/0.01 年；锚点容差 0.5%/1 万元另见财务口径）
+  severity: fail
+- id: CHK-INV-8
+  desc: 每章有来源映射（sourceMap，≥10 章），断链 0（实现按 fail 校验，严于本 warn 级）
+  severity: warn
+chapters:
+- id: CH-01
+  number: 1
+  title: 项目概述
+  level: 1
+  required: true
+  goal: 1.3 是全书“电梯陈述”，必须能被单独摘出汇报：项目是什么 + 投多少 + 财务是否可行 + AHP 评级 + 建议
+  audience:
+  - 城投
+  - 政府
+  - 评审
+  wordMin: 1900
+  templateParagraphs:
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  requiredQuestions:
+  - Q1：本章要回答的五个核心问题（项目是什么/改什么/花多少/值不值/依据什么）是否齐全
+  - Q2：1.3 的六个数字能否被单独摘出、且与第七/八/九章逐字相同
+  paragraphPlan:
+  - P1 结论段（1.1）：项目+范围+总投资+计算期一句话
+  - P2 1.2 主要建设内容：三类改造 + 关键工程量 + 不做清单
+  - P3 1.3 核心投资结论：投资/财务/偿债/AHP/建议五段式
+  - P4 1.4 编制依据：政策—规范—项目资料三类具名
+  requiredTables:
+  - T1-1
+  optionalTables:
+  - T1-2
+  requiredFigures: []
+  optionalFigures:
+  - F1-1
+  acceptance:
+  - ACC-STRUCT
+  - ACC-WORD
+  - ACC-KEYQ
+  - ACC-PARAS
+  - ACC-TABLE
+  - ACC-SOURCE
+  - ACC-NUM
+  - ACC-TERM
+  - ACC-NOBAN
+  - ACC-CAPTION
+  - ACC-STALE
+  - ACC-DIRECTION
+  antiPatterns:
+  - 空话：本项目意义重大、条件成熟
+  - 编数：实施主体/建设周期无来源直接写
+  - 口径：投资总额 1.1 与 7.1 差一个建设期利息
+  - 罗列：把字段列表当正文，无结论句
+  - 一致：项目名称/面积与现状报告、5.1 不一致
+  sections:
+  - id: CH-01-01
+    number: '1.1'
+    title: 项目基本信息
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 项目基本信息
+    goal: 用四段事实交代项目身份，五项必答全部可溯源，且与 5.1/5.4/7.1 同源
+    audience:
+    - 城投
+    - 政府
+    wordMin: 500
+    requiredQuestions:
+    - Q1：项目名称、建设地点、四至或改造范围、项目性质（=改造）分别是什么，与现状分析报告第一章是否一致
+    - Q2：建设周期多长，前期工作/建设期/运营期各多少年，合计计算期多少年（不允许只写约 3 年）
+    - Q3：实施主体是谁，是否拟设项目公司、股权与治理结构如何
+    - Q4：投资控制目标多少万元，含不含建设期利息
+    - Q5：项目方向是什么，它决定了第六至九章哪些条款适用
+    paragraphPlan:
+    - P1 结论句 60–80 字：项目 + 范围 + 总投资 + 计算期
+    - P2 逐项事实：名称/地点/范围/性质/面积，每项可溯源
+    - P3 实施主体与治理结构
+    - P4 建设周期与投资控制目标，注明与 5.4/7.1 同源
+    requiredTables:
+    - T1-1
+    optionalTables:
+    - T1-2
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-SOURCE
+    - ACC-NUM
+    - ACC-TERM
+    source:
+      kind: upstream_or_slot
+      from:
+      - 项目资料
+      - 现状分析报告
+      - 用户槽位
+      missing: gap
+  - id: CH-01-02
+    number: '1.2'
+    title: 主要建设内容概述
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 主要建设内容概述
+    goal: 三句话说清改什么：三类改造 + 关键工程量 + 与 5.3/7.1 的对应关系，并给负面清单
+    audience:
+    - 城投
+    - 评审
+    wordMin: 400
+    requiredQuestions:
+    - Q1：改造内容分几类共几项，按基础类/完善类/提升类的归类结果是什么
+    - Q2：关键工程量 2–4 个是多少（改造建筑面积、外立面面积、管网长度、停车位或充电桩数量、绿化面积）
+    - Q3：这些内容与 5.3 分项改造是否一一对应，与 7.1 投资构成是否呼应
+    - Q4：明确不做什么（负面清单），避免评审误读为全拆全建
+    paragraphPlan:
+    - P1 总述：改造内容分三类共 N 项、总投资 X 万元
+    - P2 分类概述：基础/完善/提升各 1–2 句 + 关键工程量
+    - P3 工程量—投资—5.3 对应关系声明 + 负面清单
+    requiredTables: []
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-SOURCE
+    - ACC-NUM
+    source:
+      kind: cross_chapter
+      from: CH-05-03
+      missing: gap
+  - id: CH-01-03
+    number: '1.3'
+    title: 核心投资结论
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 核心投资结论
+    goal: 全书最重要的一节：投资 + 财务 + 偿债 + AHP + 建议，六问全答且数字与 7/8/9 章逐字一致
+    audience:
+    - 城投
+    - 政府
+    - 评审
+    wordMin: 600
+    requiredQuestions:
+    - Q1：总投资多少，资金结构（资本金/专项融资/政策性补助）各多少、占比
+    - Q2：财务是否可行，税后 FIRR、FNPV、静态回收期各多少，与基准收益率 3.50% 比较结论
+    - Q3：资本金收益与偿债：资本金 FIRR/FNPV、ROE、ROI、ICR、DSCR 各多少
+    - Q4：AHP 综合得分多少、评级是什么（优秀/良好/一般/不可行）
+    - Q5：政策符合性、必要性、区域条件、风险各一句判断
+    - Q6：建议是什么（实施/优化后实施/分期实施/暂缓），给出 2–3 条可执行建议
+    paragraphPlan:
+    - P1 结论句：建议结论 + 3 个核心理由
+    - P2 财务：6 项指标 + 与基准对比
+    - P3 政策/必要性/区域/AHP 四维一句话结论
+    - P4 风险与建议：分期、补助、业态、融资
+    requiredTables: []
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-SOURCE
+    - ACC-NUM
+    - ACC-TERM
+    source:
+      kind: computed
+      from: 投资估算.json + 财务测算.json
+      missing: gap
+  - id: CH-01-04
+    number: '1.4'
+    title: 编制依据
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 编制依据
+    goal: 政策—规范—项目资料三类依据具名可查，缺失如实披露，禁止自指“依据模板”
+    audience:
+    - 评审
+    - 政府
+    wordMin: 400
+    requiredQuestions:
+    - Q1：依据哪些国家/省/市政策与规划文件（名称 + 文号或年份，可定位）
+    - Q2：依据哪些技术规范与标准（投资估算、财务评价、AHP）
+    - Q3：依据哪些项目资料（现状分析报告版本或日期、民意调研、前期对接）
+    - Q4：哪些依据未取得或缺失（诚实披露）
+    paragraphPlan:
+    - P1 总述与分层说明
+    - P2 政策法规 3–6 条（逐条：名称+文号+适用点）
+    - P3 技术规范 2–3 条
+    - P4 项目资料与数据来源（版本/日期）
+    - P5 缺失说明（若有）
+    requiredTables: []
+    optionalTables:
+    - T1-2
+    requiredFigures: []
+    optionalFigures:
+    - F1-1
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-SOURCE
+    - ACC-NOBAN
+    source:
+      kind: template_default
+      from: 建议书编制规范/项目资料
+      missing: placeholder
+promptRules:
+- id: R-01
+  paragraph: 8
+  section: CH-01-01
+  text: 建设周期：明确改造总周期，包括前期工作周期，改造实施周期。（数据来源：项目资料或自行输入）
+  kind: user_or_project_file
+  from:
+  - 项目资料
+  - 用户槽位
+  missing: gap
+- id: R-02
+  paragraph: 9
+  section: CH-01-01
+  text: 实施主体：项目实施单位、拟设立项目公司架构（数据来源：项目资料或自行输入）
+  kind: user_or_project_file
+  from:
+  - 项目资料
+  - 用户槽位
+  missing: gap
+- id: R-03
+  paragraph: 10
+  section: CH-01-01
+  text: 投资控制目标：明确预计改造总投资金额（数据来源：从第七章投资估算中提取）
+  kind: computed
+  from: 投资估算.json#totalInvestment
+  missing: gap
+- id: R-04
+  paragraph: 12
+  section: CH-01-02
+  text: （数据来源：从第五章5.3小节内容提炼总结）
+  kind: cross_chapter
+  from: CH-05-03
+  missing: gap
+- id: R-05
+  paragraph: 15
+  section: CH-01-03
+  text: （数据来源：结合报告内容进行总结）
+  kind: computed
+  from: 财务测算.json#indicators
+  missing: gap
+- id: R-06
+  paragraph: 18
+  section: CH-01-04
+  text: （数据来源：项目资料、网络资料 ）
+  kind: project_file_or_web
+  from:
+  - 项目资料
+  - 网络资料
+  missing: gap

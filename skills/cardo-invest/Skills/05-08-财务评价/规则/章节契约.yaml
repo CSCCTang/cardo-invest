@@ -1,0 +1,734 @@
+schema: cardo/invest-chapter-contract/v2
+version: 2
+extractedAt: '2026-10-22'
+updatedAt: '2026-10-23'
+producer: cardo-invest-spec/T3+T18
+source:
+  templateAsset: skills/cardo-invest-spec/assets/templates/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx
+  templateSha256: f8f97d8bcd317007d2d76e1871f319797fe7b8e297ee7a48365bb5dfafce7b10
+  originalSha256: 395b0a47ab448eac21c1c52cdbe7014db24e68b22c001c34eb6839e2751d026a
+  originalChapters: 10
+  originalHeadingCensus: 55 个标题 = H1×10 + H2×26 + H3×12 + H4×7
+  chapterRequirements: docs/模板逐章要求.md
+  chapterSkillConvention: docs/章节skill约定.md
+  note: 模板正文 34 处“数据来源”字样（28 标准 + 6 非标准）已全部转为 promptRules；成品 0 残留由全局断言保证
+units:
+  chapterCount: 10
+  tableSlotCount: 6
+  promptLineCount: 34
+  templateHeadingCount: 45
+  sectionNodeCount: 47
+  syntheticSectionCount: 2
+  tableIndexCount: 42
+  mandatoryTableCount: 35
+  optionalTableCount: 7
+  figureIndexCount: 12
+  mandatoryFigureCount: 8
+  conditionalFigureCount: 3
+  tableCountMin: 20
+  figureCountMin: 6
+  wordTotalMin: 21400
+  wordTotalFloor: 20000
+gates:
+  chapterScope: G-invest-2
+  promptLinePolicy: 提示行只作为取料规则，绝不出现在成品
+  writingScope: G-invest-7
+  writingPolicy: 语气/术语/禁用词/来源行/块级语法/题注只在 写作规范.yaml 定义，本契约只引用不复制
+writingProfile:
+  rulesFile: 写作规范.yaml
+  writingLib: scripts/writing.py
+  checker: scripts/check_report_v2.py
+  fragmentFormat: markdown + 块级 HTML 注释语法
+  fragmentPath: 05_过程/投资决策/分章/CH-XX.md
+  blockSyntaxRef: 写作规范.yaml#blockSyntax
+  contractRef: skills/cardo-invest-spec/规则/章节契约.yaml
+  chapterHeadingPolicy: 分章稿不写 H1（compose 生成）；小节标题
+  numbering:
+    table: 表 <章>-<章内出现序号>
+    figure: 图 <章>-<章内出现序号>
+    rule: 编号按成品出现顺序连续；章内不跳号、不重号
+  wordMinSemantics: wordMin = 该节自身正文中文字符数（不含下级小节/表格/来源行/标题）；章 wordMin = 各节之和
+  paragraphPlanSemantics: paragraphPlan 是有序段落意图清单，不是逐段模板；顺序可变通，段数不得少于 length-1
+  requiredQuestionsSemantics: 必答问题必须在小节正文里被明确回答；允许换句式，不允许漏答；答不出写（资料缺失：…）
+  acceptanceSemantics: acceptance 里的 id 指向 acceptanceCatalog；fail 级不过则该小节判 fail
+  optionalSemantics: optionalTables/optionalFigures 为材料充足时升级的选做项，不计入门槛
+  dataPolicy: 数字只读上游引擎 JSON；章节脚本禁止自行计算财务指标（财务口径.yaml 为唯一口径）
+  wordCountPolicy: count_cn_words() 统计中文汉字，去标题/表格/来源行/图块；实现见 scripts/writing.py
+globalAssertions:
+- id: CHK-INV-1
+  desc: 一级标题数量=10 且顺序与契约 chapters 一致
+  severity: fail
+- id: CHK-INV-2
+  desc: 表位 1–6 齐全且表头与表格契约一致
+  severity: fail
+- id: CHK-INV-3
+  desc: 成品不含“数据来源”提示行（0 残留），且契约 34 条 promptRules 每条已映射到 section
+  severity: fail
+- id: CHK-INV-4
+  desc: 成品不含占位符（双花括号/待补/TODO/XXX）
+  severity: fail
+- id: CHK-INV-5
+  desc: 成品与插件资产不含真实项目名（项目级扫描 0 命中）
+  severity: fail
+- id: CHK-INV-6
+  desc: 成品与插件文本不含盘符/UNC/用户目录绝对路径
+  severity: fail
+- id: CHK-INV-7
+  desc: 表位 1/2 指标数字/行名/单位与 财务测算.json 一致（成品展示容差 0.04pp/0.01 万元/0.01 年；锚点容差 0.5%/1 万元另见财务口径）
+  severity: fail
+- id: CHK-INV-8
+  desc: 每章有来源映射（sourceMap，≥10 章），断链 0（实现按 fail 校验，严于本 warn 级）
+  severity: warn
+chapters:
+- id: CH-08
+  number: 8
+  title: 财务评价
+  level: 1
+  required: true
+  goal: 回答“赚不赚钱、能不能还债、扛不扛得住波动”；三条铁律：数字唯一来源 财务测算.json、每指标标口径、10 项指标齐全
+  audience:
+  - 评审
+  - 城投
+  wordMin: 3800
+  templateParagraphs:
+  - 220
+  - 221
+  - 225
+  - 232
+  - 257
+  - 285
+  - 306
+  - 309
+  requiredQuestions:
+  - Q1：10 项指标（firrAll/fnpvAll/ptAll/firrEquity/fnpvEquity/ptEquity/roe/roi/icr/dscr）齐全且与
+    indicators 逐项一致吗
+  - Q2：表位 1/2 表头与数值规范（表位 2 写“资本金”）吗
+  - Q3：敏感性是否 ≥3 因素
+  - Q4：ICR/DSCR 口径与 coverage.basis 一致（运营期聚合口径）吗
+  - Q5：与 1.3 同数吗
+  paragraphPlan:
+  - P1 结论段（8.1）：财务可行判断 + 口径声明
+  - P2 评价说明与参数（8.1.1/8.1.2）
+  - P3 收入与成本（8.1.3/8.1.4）
+  - P4 现金流与指标（8.1.5.1），表 8-9/8-10 就地
+  - P5 效益指标（8.1.5.2）
+  - P6 偿债（8.2）与可持续性 + 敏感性（8.3）
+  requiredTables:
+  - T8-1
+  - T8-2
+  - T8-3
+  - T8-5
+  - T8-6
+  - T8-8
+  - T8-9
+  - T8-10
+  optionalTables:
+  - T8-4
+  - T8-7
+  requiredFigures:
+  - F8-1
+  - F8-2
+  optionalFigures: []
+  acceptance:
+  - ACC-STRUCT
+  - ACC-WORD
+  - ACC-KEYQ
+  - ACC-PARAS
+  - ACC-TABLE
+  - ACC-SLOT
+  - ACC-FIGURE
+  - ACC-SOURCE
+  - ACC-NUM
+  - ACC-TERM
+  - ACC-NOBAN
+  - ACC-CAPTION
+  - ACC-STALE
+  antiPatterns:
+  - 口径：税前税后混用（模板 xlsx 的 J 列是税前，别对错列）
+  - 一致：表位 1/2 与正文数字不一致
+  - 结论：只说可行不对比 3.50% 基准
+  - 编数：敏感性数据自算、与引擎不一致
+  - 照抄：写“计算期 32 年、运营期 29 年、后 19 年”等模板旧值
+  sections:
+  - id: CH-08-01
+    number: '8.1'
+    title: 盈利能力分析
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 盈利能力分析
+    goal: 导语 1 段：评价依据、计算期、口径（税后、折现率 3.50%）、本章结论
+    audience:
+    - 评审
+    wordMin: 100
+    requiredQuestions: []
+    paragraphPlan:
+    - P1 导语：结论 + 口径声明，然后直接进 8.1.1
+    requiredTables: []
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-SOURCE
+    source:
+      kind: computed
+      from: 财务测算.json#period/discountRate
+      missing: gap
+    children:
+    - id: CH-08-01-01
+      number: 8.1.1
+      title: 评价说明
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 评价说明
+      goal: 依据、范围与口径、计算期与折现率、价格体系四件事说清
+      audience:
+      - 评审
+      wordMin: 200
+      requiredQuestions:
+      - Q1：评价依据是什么（《建设项目经济评价方法与参数》第三版 + 国家财税政策 + 口径版本）
+      - Q2：评价范围与口径是什么（税后；全部投资 + 资本金两套）
+      - Q3：计算期与折现率是多少
+      - Q4：价格体系是什么（不含税收入、是否考虑涨价）
+      paragraphPlan:
+      - P1 依据
+      - P2 口径与范围
+      - P3 计算期/折现率/价格体系
+      requiredTables: []
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-KEYQ
+      - ACC-SOURCE
+      - ACC-TERM
+      source:
+        kind: computed
+        from: 财务口径.yaml + 财务测算.json
+        missing: gap
+    - id: CH-08-01-02
+      number: 8.1.2
+      title: 财务评价基础数据与参数
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 财务评价基础数据与参数
+      goal: 参数逐项给取值与依据，与模板默认差异显式说明（D-03/D-08）
+      audience:
+      - 评审
+      - 内部
+      wordMin: 350
+      requiredQuestions:
+      - Q1：计算期几年（建设期/运营期/合计）
+      - Q2：基准收益率或折现率多少，依据什么
+      - Q3：运营方案是什么（自主/委托）
+      - Q4：关键参数：税率、折旧年限、残值率、贷款利率/期限/宽限期、修理费/大修费假设
+      - Q5：与模板默认值不一致的地方是否说明（32 年、11%、4.5 元/㎡）
+      paragraphPlan:
+      - P1 参数结论：计算期 X 年、折现率 3.50%
+      - P2 计算期
+      - P3 基准收益率
+      - P4 运营方案
+      - P5 关键参数表 + 与模板默认差异说明
+      requiredTables:
+      - T8-1
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-KEYQ
+      - ACC-TABLE
+      - ACC-SOURCE
+      - ACC-NUM
+      - ACC-STALE
+      source:
+        kind: computed
+        from: 财务输入.json + 财务口径.yaml
+        missing: gap
+    - id: CH-08-01-03
+      number: 8.1.3
+      title: 经营收入分析
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 经营收入分析
+      goal: 逐项给数量、单价、首年与运营期收入、占比与依据，与 4.4/5.3 同数
+      audience:
+      - 评审
+      - 城投
+      wordMin: 650
+      requiredQuestions:
+      - Q1：有哪几类收入项，每项测算公式（数量×单价×天数×出租率）是什么
+      - Q2：每项首年收入、运营期合计、占收入比各多少
+      - Q3：单价与增长率依据是什么（政府定价/市场调研/合同）
+      - Q4：收入假设与 4.4 是否一致
+      - Q5：未选用的收入项为什么不选（方向/条件限制）
+      - Q6：出租率或增长率变动对收入影响多大
+      paragraphPlan:
+      - P1 结论：年运营收入 X 万元，结构为…
+      - P2 逐项说明（按项目选用的收入项，每项 2–3 句）
+      - P3 收入结构与假设说明（含未选项目说明）
+      requiredTables:
+      - T8-2
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-KEYQ
+      - ACC-TABLE
+      - ACC-SOURCE
+      - ACC-NUM
+      source:
+        kind: computed
+        from: 财务测算.json#revenue
+        missing: gap
+    - id: CH-08-01-04
+      number: 8.1.4
+      title: 年成本支出预测
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 年成本支出预测
+      goal: 导语 1 段：成本构成（经营成本/折旧摊销/税金）+ 年运营成本占收入比结论
+      audience:
+      - 评审
+      wordMin: 100
+      requiredQuestions: []
+      paragraphPlan:
+      - P1 导语：成本构成 + 占收入比结论
+      requiredTables: []
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-SOURCE
+      source:
+        kind: computed
+        from: 财务测算.json#cost
+        missing: gap
+      children:
+      - id: CH-08-01-04-01
+        number: 8.1.4.1
+        title: 经营成本
+        level: 4
+        required: true
+        templateHeading: true
+        renderHeading: true
+        templateHeadingText: 经营成本
+        goal: 五项成本逐项给基数与费率、年金额与占收入比，人员与修理费假设可核
+        audience:
+        - 评审
+        wordMin: 280
+        requiredQuestions:
+        - Q1：经营成本有哪几项，各自计算方法（费率/定额/人数）是什么
+        - Q2：年经营成本多少、占收入比多少
+        - Q3：人员配置与薪酬假设是什么（定员/人均年薪/福利/增长率）
+        - Q4：修理费与大修费的年限分段假设是否与运营期匹配
+        paragraphPlan:
+        - P1 结论：年经营成本 X 万元、占收入 Y%
+        - P2 外购燃料动力 + 工资福利
+        - P3 管理费 + 日常修理费 + 其他费用
+        - P4 大修费与年限假设
+        requiredTables:
+        - T8-3
+        optionalTables: []
+        requiredFigures: []
+        acceptance:
+        - ACC-WORD
+        - ACC-KEYQ
+        - ACC-TABLE
+        - ACC-SOURCE
+        - ACC-NUM
+        - ACC-STALE
+        source:
+          kind: computed
+          from: 财务测算.json#cost.operatingCost
+          missing: gap
+      - id: CH-08-01-04-02
+        number: 8.1.4.2
+        title: 折旧费、无形及递延资产摊销
+        level: 4
+        required: true
+        templateHeading: true
+        renderHeading: true
+        templateHeadingText: 折旧费、无形及递延资产摊销
+        goal: 折旧方法与参数、年折旧额、摊销说明三件事；强调折旧是非付现成本
+        audience:
+        - 评审
+        wordMin: 220
+        requiredQuestions:
+        - Q1：折旧方法、年限、残值率是什么
+        - Q2：年折旧额多少，折旧对现金流的影响（非付现成本）怎么解释
+        - Q3：是否有无形资产或递延资产摊销（通常不涉及），若涉及年限多少
+        paragraphPlan:
+        - P1 年折旧结论
+        - P2 折旧假设与计算
+        - P3 摊销说明（不涉及也要写明）
+        requiredTables: []
+        optionalTables:
+        - T8-4
+        requiredFigures: []
+        acceptance:
+        - ACC-WORD
+        - ACC-KEYQ
+        - ACC-SOURCE
+        - ACC-NUM
+        source:
+          kind: computed
+          from: 财务测算.json#cost.depreciation
+          missing: gap
+      - id: CH-08-01-04-03
+        number: 8.1.4.3
+        title: 增值税、所得税、税金及附加（可按模板设定数据，但需设定手动修改功能）
+        level: 4
+        required: true
+        templateHeading: true
+        renderHeading: true
+        templateHeadingText: 增值税、所得税、税金及附加（可按模板设定数据，但需设定手动修改功能）
+        goal: 逐税种给税率与计税依据，旧税率显式标注待确认，首段落实“参数可覆写”（D-05 标题不剥离）
+        audience:
+        - 评审
+        wordMin: 300
+        requiredQuestions:
+        - Q1：各税种与税率是什么（增值税分项税率、所得税 25%、城建税 7%、教育附加 3%+2%、印花税、土地使用税、房产税）
+        - Q2：应纳增值税怎么算（销项−进项，负值如何处理）
+        - Q3：所得税计算基础（应纳税所得额，如何调整）
+        - Q4：税率与模板旧口径不一致时如何标注（租赁 11% vs 现行 9%；土地使用税 8 与 4.5；房产税是否启用）
+        paragraphPlan:
+        - P1 结论：年增值税 X 万元、综合税负 Y%，并声明参数可覆写
+        - P2 增值税（销项/进项）
+        - P3 附加税与财产行为税
+        - P4 所得税
+        requiredTables:
+        - T8-5
+        optionalTables: []
+        requiredFigures: []
+        acceptance:
+        - ACC-WORD
+        - ACC-KEYQ
+        - ACC-TABLE
+        - ACC-SOURCE
+        - ACC-TERM
+        - ACC-STALE
+        source:
+          kind: computed_or_slot
+          from:
+          - 财务测算.json#cost.vatPayable
+          - slots.manualTax
+          missing: gap
+    - id: CH-08-01-05
+      number: 8.1.5
+      title: 盈利能力
+      level: 3
+      required: true
+      templateHeading: true
+      renderHeading: true
+      templateHeadingText: 盈利能力
+      goal: 导语 1 段：指标口径（税后）+ 表位 1/2 位置说明 + 盈利能力总判断
+      audience:
+      - 评审
+      - 城投
+      wordMin: 100
+      requiredQuestions: []
+      paragraphPlan:
+      - P1 导语：口径 + 表 8-9/8-10 位置说明 + 总判断
+      requiredTables: []
+      optionalTables: []
+      requiredFigures: []
+      acceptance:
+      - ACC-WORD
+      - ACC-SOURCE
+      source:
+        kind: computed
+        from: 财务测算.json#indicators
+        missing: gap
+      children:
+      - id: CH-08-01-05-01
+        number: 8.1.5.1
+        title: 财务现金流量分析
+        level: 4
+        required: true
+        templateHeading: true
+        renderHeading: true
+        templateHeadingText: 财务现金流量分析
+        goal: 现金流结构与转正年份、全部投资与资本金六项指标、表 8-9/8-10 就地（D-12）
+        audience:
+        - 评审
+        - 城投
+        wordMin: 350
+        requiredQuestions:
+        - Q1：全部投资/资本金现金流的流入、流出构成是什么
+        - Q2：6 项指标（FIRR/FNPV/PT 各两套）各多少，与基准收益率 3.50% 比较结论
+        - Q3：累计净现金流何时转正，最低点（最大资金缺口）出现在哪一年
+        - Q4：表 8-9/8-10 的数值与本段是否一致
+        paragraphPlan:
+        - P1 全部投资 3 指标 + 与基准对比的结论
+        - P2 资本金 3 指标结论
+        - P3 累计现金流与回收期、缺口年份
+        - P4 表 8-9/8-10 交叉引用
+        requiredTables:
+        - T8-9
+        - T8-10
+        optionalTables: []
+        requiredFigures:
+        - F8-1
+        acceptance:
+        - ACC-WORD
+        - ACC-KEYQ
+        - ACC-TABLE
+        - ACC-SLOT
+        - ACC-FIGURE
+        - ACC-SOURCE
+        - ACC-NUM
+        - ACC-CAPTION
+        source:
+          kind: computed
+          from: 财务测算.json#cashflows +
+          missing: gap
+      - id: CH-08-01-05-02
+        number: 8.1.5.2
+        title: 财务效益分析
+        level: 4
+        required: true
+        templateHeading: true
+        renderHeading: true
+        templateHeadingText: 财务效益分析
+        goal: ROE 与 ROI 公式、分子分母来源、与行业对比与投资标准判断
+        audience:
+        - 评审
+        - 城投
+        wordMin: 270
+        requiredQuestions:
+        - Q1：ROE、ROI 各多少，公式（NP/EC、EBIT/TI）是什么
+        - Q2：年平均净利润、年平均息税前利润各多少
+        - Q3：与行业或同类项目水平相比是否合理
+        - Q4：投资收益结论（是否达到公司投资标准）
+        paragraphPlan:
+        - P1 ROE/ROI 结论
+        - P2 计算口径与分子分母来源
+        - P3 对比与投资标准判断
+        requiredTables: []
+        optionalTables: []
+        requiredFigures: []
+        acceptance:
+        - ACC-WORD
+        - ACC-KEYQ
+        - ACC-SOURCE
+        - ACC-NUM
+        - ACC-TERM
+        source:
+          kind: computed
+          from: 财务测算.json#indicators
+          missing: gap
+  - id: CH-08-02
+    number: '8.2'
+    title: 债务清偿能力分析
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 债务清偿能力分析
+    goal: 融资条件、还本付息计划、ICR/DSCR（运营期聚合口径）、偿债高峰与缓释，五段齐
+    audience:
+    - 评审
+    - 城投
+    wordMin: 400
+    requiredQuestions:
+    - Q1：融资额、期限、利率、宽限期、还款方式各是什么
+    - Q2：每年还本付息多少（还本/付息分开）
+    - Q3：ICR、DSCR 各多少、是否 ≥1.0 / ≥1.3，口径是逐年最低还是运营期聚合
+    - Q4：可供偿还资金（EBITDA−所得税）是否覆盖当年还本付息
+    - Q5：偿债风险与缓释措施是什么（宽限期、再融资、补助）
+    paragraphPlan:
+    - P1 偿债能力结论（指标值+判断）
+    - P2 融资条件
+    - P3 还本付息计划
+    - P4 ICR/DSCR 分析（写明聚合口径）
+    - P5 风险缓释
+    requiredTables:
+    - T8-6
+    optionalTables: []
+    requiredFigures: []
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-SOURCE
+    - ACC-NUM
+    - ACC-TERM
+    source:
+      kind: computed
+      from: 财务测算.json#indicators（icr/dscr）+
+      missing: gap
+  - id: CH-08-03
+    number: '8.3'
+    title: 财务可持续性分析
+    level: 2
+    required: true
+    templateHeading: true
+    renderHeading: true
+    templateHeadingText: 财务可持续性分析
+    goal: 累计盈余为正的年份与最低点、敏感性 3 因素（表 8-8 + 图 8-2，不新增标题，D-11）、风险年份与对策
+    audience:
+    - 评审
+    - 城投
+    wordMin: 480
+    requiredQuestions:
+    - Q1：运营期累计盈余资金是否始终为正，最低年份余额多少、哪一年
+    - Q2：是否存在资金链风险（大修年与还本高峰叠加）
+    - Q3：敏感性分析至少 3 因素（收入、经营成本、投资/工期）±10% 对 FIRR/FNPV/回收期的影响，哪个最敏感、临界点在哪
+    - Q4：对策是什么（预备费、分期投入、再融资、补助）
+    paragraphPlan:
+    - P1 财务生存能力结论
+    - P2 累计盈余与最低年份
+    - P3 敏感性分析（3 因素，表+图，给敏感度系数/临界点）
+    - P4 风险年份与对策
+    requiredTables:
+    - T8-8
+    optionalTables:
+    - T8-7
+    requiredFigures:
+    - F8-2
+    acceptance:
+    - ACC-WORD
+    - ACC-KEYQ
+    - ACC-TABLE
+    - ACC-FIGURE
+    - ACC-SOURCE
+    - ACC-NUM
+    - ACC-CAPTION
+    source:
+      kind: computed
+      from: 财务测算.json#cashflows +
+      missing: gap
+promptRules:
+- id: R-21
+  paragraph: 237
+  section: CH-08-01-03
+  text: 停车单价根据政府定价或市场调研确定。（数据来源：项目资料、网络资料）
+  kind: input_or_upstream
+  from:
+  - 财务输入.json#revenue.parking
+  - 项目资料
+  - 网络资料
+  missing: gap
+- id: R-22
+  paragraph: 239
+  section: CH-08-01-03
+  text: 项目实施范围内设置流动餐车数量。（数据来源：手动输入或前述建设内容中调取）
+  kind: input_or_cross
+  from:
+  - 财务输入.json#revenue.mobile-food
+  - CH-05-03
+  missing: gap
+- id: R-23
+  paragraph: 240
+  section: CH-08-01-03
+  text: 餐车租赁单价根据市场调研确定。（数据来源：项目资料、网络资料）
+  kind: input_or_upstream
+  from:
+  - 财务输入.json#revenue.mobile-food
+  - 项目资料
+  - 网络资料
+  missing: gap
+- id: R-24
+  paragraph: 242
+  section: CH-08-01-03
+  text: 项目实施范围内外摆空间面积。（数据来源：手动输入或前述建设内容中调取）
+  kind: input_or_cross
+  from:
+  - 财务输入.json#revenue.outdoor-dining
+  - CH-05-03
+  missing: gap
+- id: R-25
+  paragraph: 243
+  section: CH-08-01-03
+  text: 租赁单价和增长率根据市场调研确定。（数据来源：项目资料、网络资料、手动输入）
+  kind: input_or_upstream
+  from:
+  - 财务输入.json#revenue.outdoor-dining
+  - 项目资料
+  - 网络资料
+  missing: gap
+- id: R-26
+  paragraph: 245
+  section: CH-08-01-03
+  text: 广告位设置数量。其中道路设置广告灯箱数量，流动餐车设置广告位数量。（数据来源：手动输入或前述建设内容中调取）
+  kind: input_or_cross
+  from:
+  - 财务输入.json#revenue.advertising
+  - CH-05-03
+  missing: gap
+- id: R-27
+  paragraph: 246
+  section: CH-08-01-03
+  text: 收入单价和增长率根据市场调研确定。（数据来源：项目资料、网络资料、手动输入）
+  kind: input_or_upstream
+  from:
+  - 财务输入.json#revenue.advertising
+  - 项目资料
+  - 网络资料
+  missing: gap
+- id: R-28
+  paragraph: 248
+  section: CH-08-01-03
+  text: 充电桩快慢充数量。（数据来源：手动输入或前述建设内容中调取）
+  kind: input_or_cross
+  from:
+  - 财务输入.json#revenue.charging
+  - CH-05-03
+  missing: gap
+- id: R-29
+  paragraph: 249
+  section: CH-08-01-03
+  text: 收入单价根据市场调研确定。（数据来源：项目资料、网络资料、手动输入）
+  kind: input_or_upstream
+  from:
+  - 财务输入.json#revenue.charging
+  - 项目资料
+  - 网络资料
+  missing: gap
+- id: R-30
+  paragraph: 251
+  section: CH-08-01-03
+  text: 商铺租赁面积（数据来源：手动输入或前述建设内容中调取）
+  kind: input_or_cross
+  from:
+  - 财务输入.json#revenue.shop-rent
+  - CH-05-03
+  missing: gap
+- id: R-31
+  paragraph: 252
+  section: CH-08-01-03
+  text: 收入单价根据市场调研确定。（数据来源：项目资料、网络资料、手动输入）
+  kind: input_or_upstream
+  from:
+  - 财务输入.json#revenue.shop-rent
+  - 项目资料
+  - 网络资料
+  missing: gap
+- id: R-32
+  paragraph: 254
+  section: CH-08-01-03
+  text: 商铺租赁面积（数据来源：手动输入或前述建设内容中调取）
+  kind: input_or_cross
+  from:
+  - 财务输入.json#revenue.office-rent
+  - CH-05-03
+  missing: gap
+- id: R-33
+  paragraph: 255
+  section: CH-08-01-03
+  text: 收入单价根据市场调研确定。（数据来源：项目资料、网络资料、手动输入）
+  kind: input_or_upstream
+  from:
+  - 财务输入.json#revenue.office-rent
+  - 项目资料
+  - 网络资料
+  missing: gap

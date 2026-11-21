@@ -13,7 +13,7 @@
   * 可研 PDF 不复制（体积大），只引用；财务参数里已记录来源文件名与页码。
 
 用法：
-    python Skills/01b-可研财务提取/scripts/backfill_projects.py --source <提资数据根> [--dry-run]
+    python <技能目录>/Skills/01b-可研财务提取/scripts/backfill_projects.py --source <提资数据根> [--dry-run]
 """
 
 from __future__ import annotations

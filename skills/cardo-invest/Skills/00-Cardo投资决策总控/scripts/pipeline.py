@@ -4,11 +4,11 @@
 所有中间产物落「过程文件/<编号-名称>/」，成果只落「成果文件/」（Office）。
 
 用法（工作区根执行）：
-  python Skills/00-Cardo投资决策总控/scripts/pipeline.py status --workspace .
-  python Skills/00-Cardo投资决策总控/scripts/pipeline.py run    --workspace .
-  python Skills/00-Cardo投资决策总控/scripts/pipeline.py run    --workspace . --from 03
-  python Skills/00-Cardo投资决策总控/scripts/pipeline.py run    --workspace . --scenario gaps
-  python Skills/00-Cardo投资决策总控/scripts/pipeline.py scaffold --target <新目录> --project-name <名称>
+  python <技能目录>/Skills/00-Cardo投资决策总控/scripts/pipeline.py status --workspace .
+  python <技能目录>/Skills/00-Cardo投资决策总控/scripts/pipeline.py run    --workspace .
+  python <技能目录>/Skills/00-Cardo投资决策总控/scripts/pipeline.py run    --workspace . --from 03
+  python <技能目录>/Skills/00-Cardo投资决策总控/scripts/pipeline.py run    --workspace . --scenario gaps
+  python <技能目录>/Skills/00-Cardo投资决策总控/scripts/pipeline.py scaffold --target <新目录> --project-name <名称>
 
 退出码：0 全过；1 某步失败（脚本报错或闸门未过）；2 参数/工作区/前置产物问题。
 """
@@ -216,7 +216,7 @@ def write_fill_request(workspace, payload, manifest):
         "",
         "- 项目：{}".format(project.get("name") or "（未识别）"),
         "- 填写文件：`{}`".format(source),
-        "- 填完重跑：`python 开工.py` 或 `python Skills/00-Cardo投资决策总控/scripts/pipeline.py run --workspace . --from 01`",
+        "- 填完重跑：`python <技能目录>/scripts/cardo.py` 或 `python <技能目录>/Skills/00-Cardo投资决策总控/scripts/pipeline.py run --workspace . --from 01`",
         "- 说明：只补下表空格，不要改已填单元格；填完 01 会重新取件并续跑。",
         "",
         "| 字段 | sheet | 单元格 | 要填什么 | 填写示例 |",
@@ -906,7 +906,7 @@ def run_steps(workspace, from_step, to_step, scenario, baseline_mode):
             write_logs(workspace, config, scenario, started, records, log, failed=key)
             if gate_exit == 3:
                 print("[总控] 第 {} 步待人工介入：{}".format(key, error))
-                print("  办完后重跑：python Skills/00-Cardo投资决策总控/scripts/pipeline.py "
+                print("  办完后重跑：python <技能目录>/Skills/00-Cardo投资决策总控/scripts/pipeline.py "
                       "run --workspace . --from {}".format(key))
                 return 3
             print("[总控] 第 {} 步失败：{}".format(key, error))
@@ -1025,7 +1025,7 @@ def command_scaffold(workspace, target, project_name, baseline):
             print("  [跳过] 旧基线不是本包的（package={}），不继承".format(saved.get("package")))
     print("[scaffold] 已生成独立工作区：{}".format(target))
     print("  1) 往 输入文件/ 放 Office 输入（现状报告/AHP/低空/槽位/财务参数/模板）")
-    print("  2) python Skills/00-Cardo投资决策总控/scripts/pipeline.py run --workspace .")
+    print("  2) python <技能目录>/Skills/00-Cardo投资决策总控/scripts/pipeline.py run --workspace .")
     return 0
 
 

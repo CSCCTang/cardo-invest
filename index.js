@@ -19,6 +19,7 @@ export function apply(ctx) {
     name: 'cardo-invest',
     description: "Cardo Invest 投资决策流水线：财务参数、匡算与财务评价、三方案比选、建议书成文。",
     whenToUse: "用户要基于《财务参数.xlsx》产出《项目投资决策建议书》（匡算、财务评价、三方案比选、10 章成文）时使用。",
+    source: 'custom',
     content: skillBody(readFileSync(join(skillDir, 'SKILL.md'), 'utf8')),
     resourceBase: { kind: 'directory', path: skillDir },
   })

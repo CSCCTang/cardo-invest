@@ -211,8 +211,8 @@ def write_intake_list(rows) -> Path:
                                           else "照常开工，正文写「资料缺失」并进缺项表"), ""]
     lines += ["## 3. 下一步", "",
               "```text",
-              "python {}\\开工.py --intake   # 一项一项问，确认落位".format(SKILL.name),
-              "python {}\\开工.py            # 直接校验并开工".format(SKILL.name),
+              "python <技能目录>/scripts/cardo.py --intake   # 一项一项问，确认落位".format(SKILL.name),
+              "python <技能目录>/scripts/cardo.py            # 直接校验并开工".format(SKILL.name),
               "```", ""]
     target.write_text("\n".join(lines), encoding="utf-8")
     return target
@@ -387,7 +387,7 @@ def check_round(root: Path, round_arg: str) -> str:
         if dirty:
             say(f"[错误] 输出根 {root} 没有轮次声明，但已有 {'、'.join(dirty)}。")
             say("        本次开工会覆盖该轮产物。请显式声明本轮轮次目录，例如：")
-            say("          python 开工.py --round R3 --workspace <本轮轮次目录>")
+            say("          python <技能目录>/scripts/cardo.py --round R3 --workspace <本轮轮次目录>")
             raise SystemExit(2)
         declared = root.name
     if root.name != declared:
@@ -920,7 +920,10 @@ def cmd_hint(*args: str) -> str:
             exe = exe.replace("/", "\\")
     else:
         exe = "python"
-    parts = [exe, "{}\\开工.py".format(SKILL.name)]
+    if RUNTIME_PY.is_file():
+        parts = [exe, "{}\\开工.py".format(SKILL.name)]
+    else:
+        parts = ["python", "<技能目录>/scripts/cardo.py"]
     parts.extend(args)
     return " ".join(parts)
 

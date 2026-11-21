@@ -14,8 +14,8 @@
 退出码：0 全部通过；1 有缺失（逐项列出「缺什么、从哪补」）。
 
 用法：
-    python Skills/00-Cardo投资决策总控/scripts/doctor.py
-    python Skills/00-Cardo投资决策总控/scripts/doctor.py --json
+    python <技能目录>/Skills/00-Cardo投资决策总控/scripts/doctor.py
+    python <技能目录>/Skills/00-Cardo投资决策总控/scripts/doctor.py --json
 """
 
 from __future__ import annotations

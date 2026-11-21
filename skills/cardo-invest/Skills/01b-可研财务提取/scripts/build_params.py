@@ -8,8 +8,8 @@
     与它的空白模板。
 
 用法（工作区根执行）：
-    python Skills/01b-可研财务提取/scripts/build_params.py --workspace .
-    python Skills/01b-可研财务提取/scripts/build_params.py --workspace . --dry-run
+    python <技能目录>/Skills/01b-可研财务提取/scripts/build_params.py --workspace .
+    python <技能目录>/Skills/01b-可研财务提取/scripts/build_params.py --workspace . --dry-run
 """
 
 from __future__ import annotations

@@ -861,12 +861,35 @@ def step_08(workspace, paths, log, baseline_mode):
     log.append(record)
     fail_on_exit(record)
 
+    # 去 AI 味闸门：判据回灌自 04_工具与方法论\01_技能\08_去AI味，
+    # 必删项（B1—B12）清零才放行；四项指标与总分只留痕，不单独阻断。
+    docx_rel = "成果文件/成品版/项目投资决策建议书/项目投资决策建议书.docx"
+    deai_json = out_dir / "去AI味扫描.json"
+    deai_md = out_dir / "去AI味扫描.md"
+    record = run_cmd(workspace, [script("08", "deai_gate.py"), "--docx", docx_rel,
+                                 "--out-json", rel(deai_json, workspace),
+                                 "--out-md", rel(deai_md, workspace)],
+                     "08 去AI味扫描")
+    log.append(record)
+    if record.get("exit") not in (0, None):
+        raise Gate("成品仍有 AI 味必删项（B1—B12）：见 {}；按 写作规范.yaml 改写后重跑".format(
+            rel(deai_md, workspace)))
+
+    # 数字溯源抽样表：值级/段级两级口径，落到内部件，正文数字不改。
+    record = run_cmd(workspace, [script("08", "export_trace_sample.py"),
+                                 "--workspace", "."], "08 数字溯源抽样")
+    log.append(record)
+    fail_on_exit(record)
+
+    deai = read_json(out_dir / "去AI味扫描.json", {}) or {}
     gate = {"passed": summary.get("passed"), "total": summary.get("total"),
             "warned": summary.get("warned"),
             "boundary": (report.get("boundary") or {}).get("checked"),
             "baseline": (report.get("baseline") or {}).get("mode"),
-            "finalGates": (read_json(out_dir / "成品闸门报告.json", {}) or {}).get("ok")}
-    return gate, ["独立验证结果.json", "Office导出清单.json", "产物指纹.json", "成品闸门报告.json"], report
+            "finalGates": (read_json(out_dir / "成品闸门报告.json", {}) or {}).get("ok"),
+            "deaiScore": deai.get("total"), "deaiBanned": deai.get("bidao_count")}
+    return gate, ["独立验证结果.json", "Office导出清单.json", "产物指纹.json",
+                  "成品闸门报告.json", "去AI味扫描.json", "去AI味扫描.md"], report
 
 
 # ---------------------------------------------------------------- 编排

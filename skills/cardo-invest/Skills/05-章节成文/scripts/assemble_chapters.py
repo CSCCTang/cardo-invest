@@ -155,18 +155,30 @@ class InputError(Exception):
 
 
 def reflow_problem_text(text):
-    """2.3 的问题原文把「1. 表现：…2. 证据：…」塞在同一个自然段里。
+    """2.3 的问题原文以「1. 表现：…2. 证据：…」提纲式编号写成。
 
-    层级序数一律用文字（（1）（2）…），且每项独立成段，读者才看得出层次；
-    不在正文引入项目符号（List Bullet）。
+    de-AI 规则 B5：提纲编号与「表现/证据」标签不进正文。
+    这里按项目负责人的叙述顺序重排为「现状—依据—成因—影响—更新方向」，
+    每个问题一段，事实与数字原样保留，不改口径、不增删数值。
     """
-    text = str(text or "")
+    text = str(text or "").strip()
     if not text:
         return text
-    text = re.sub(r"(?<=[。；])\s*(?=P-\d{2}\s)", "\n\n", text)
-    text = re.sub(r"(?<![\d.])(\d)\.\s*(?=(?:表现|证据|成因|影响|对应更新方向)：)",
-                  r"\n\n（\1）", text)
-    return text
+    label_re = re.compile(
+        r"(?:[（(]?\d{1,2}[）).、]\s*)?(表现|证据|成因|影响|对应更新方向)[:：]\s*")
+    connective = {
+        "表现": "现状是", "证据": "依据是", "成因": "原因在于",
+        "影响": "由此带来", "对应更新方向": "更新方向为",
+    }
+    out = []
+    for part in (seg.strip() for seg in re.split(r"(?=P-\d{2}\s)", text)):
+        if not part:
+            continue
+        part = label_re.sub(lambda m: "。" + connective[m.group(1)], part)
+        part = re.sub(r"[。；]{2,}", "。", part).strip("。； ")
+        if part:
+            out.append(part + "。")
+    return "\n\n".join(out)
 
 
 def read_json(path, label, required=True):
@@ -2440,7 +2452,7 @@ def build_chapters(project_name, payload, estimate, finance, schemes, score_bloc
             "宏观政策取向：{}明确到 2025 年基本完成 2000 年底前建成的需改造城镇老旧小区改造任务，"
             "并按基础类、完善类、提升类分类实施；{}要求城市更新坚持保留利用为主，"
             "拆除建筑面积不应大于现状总建筑面积的 20%、拆建比不宜大于 2、就地就近安置率不宜低于 50%；"
-            "{}进一步明确保留利用为主、拆建为辅；{}与{}把老旧街区改造提升列为“十五五”城市更新重点任务。"
+            "{}明确保留利用为主、拆建为辅；{}与{}把老旧街区改造提升列为“十五五”城市更新重点任务。"
             "本项目 7 个住宅小区全部建成于 2000 年以前，建设性质为既有街区综合整治（非拆除重建），政策适用性直接成立。".format(
                 basis_library.cite(project_dir, "N02"), basis_library.cite(project_dir, "N04"),
                 basis_library.cite(project_dir, "N06"), basis_library.cite(project_dir, "N07"),
@@ -2505,8 +2517,8 @@ def build_chapters(project_name, payload, estimate, finance, schemes, score_bloc
             "安全风险与维修成本将同步上升，更新窗口不宜后移。".format(
                 _built_1980 or "4", _hardened or "57.51%", _green_road or "56.10%",
                 _max_floor or "8", _max_height_m or "24.00"),
-            "结论：综合宏观政策、中观规划与微观现状，本项目建设必要性成立。一是落实城市更新与老旧街区改造政策的"
-            "直接抓手；二是解决 7 个小区、1203 户居民管线、消防、立面、无障碍等安全与功能短板的民生工程；"
+            "结论：综合宏观政策、中观规划与微观现状，本项目建设必要性成立。一是把城市更新与老旧街区改造的政策要求"
+            "落到 7 个小区、1203 户的具体工程上；二是解决管线、消防、立面、无障碍等安全与功能短板的民生工程；"
             "三是以 {} 万元投资完成存量空间系统整治，投资方向与政策导向、片区定位和居民诉求一致。"
             "项目不涉及拆除重建和新增建设用地，实施风险可控，建议按“先安全、后功能、再品质”的顺序分期推进。".format(
                 total_w),
@@ -3076,7 +3088,7 @@ def build_chapters(project_name, payload, estimate, finance, schemes, score_bloc
         if _positive_fnpv:
             return ("可持续性判断：表 {} 三个敏感性因素的可承受幅度均超过 ±10% 实测区间，"
                     "项目在现有收入与成本口径下具备安全边际、财务上可行；"
-                    "分项实施与成本管控可进一步扩大安全边际，收入端仍应作为运营监控的首要对象。"
+                    "分项实施与成本管控可扩大安全边际，收入端仍应作为运营监控的首要对象。"
                     "表列为端点线性外推值，若收入或成本结构发生实质变化，须按同一口径重新测算。".format(sens_no))
         return ("可持续性判断：表 {} 三个敏感性因素的临界点均超出可实现区间，项目在现有收入与成本口径下财务上不可行；"
                 "分期实施、控制投资规模、招商前置与成本管控只能收窄缺口，不能改变结论。"

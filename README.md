@@ -1,8 +1,8 @@
 # cardo-invest
 
 > 安装（二选一）：
-> `dsh plugin --profile <profile> add github:CSCCTang/cardo-invest#v0.1.1`
-> `dsh plugin --profile <profile> add <本地路径>\cardo-invest-0.1.1.tgz`
+> `dsh plugin --profile <profile> add github:CSCCTang/cardo-invest#v0.1.2`
+> `dsh plugin --profile <profile> add <本地路径>\cardo-invest-0.1.2.tgz`
 
 投资决策：给一张财务参数表，产出投资匡算、财务评价、三方案比选与《项目投资决策建议书》。
 
@@ -31,7 +31,7 @@
 
 ## 许可证与版本
 
-- 版本 `0.1.1`；许可证 **AGPL-3.0-or-later**，见 [LICENSE](LICENSE) 与 [NOTICE](NOTICE)。
+- 版本 `0.1.2`；许可证 **AGPL-3.0-or-later**，见 [LICENSE](LICENSE) 与 [NOTICE](NOTICE)。
 - 第三方组件与许可证见 [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)。
 - 运行环境：Windows；Python ≥ 3.11；dsh ≥ 0.2.2-rc.5。
 
@@ -40,3 +40,4 @@
 - [docs/01_使用流程.md](docs/01_使用流程.md)
 - [docs/02_输入准备.md](docs/02_输入准备.md)
 - [docs/03_常见失败.md](docs/03_常见失败.md)
+- [docs/releases/2026-11-26_V1.1/00_变更说明.md](docs/releases/2026-11-26_V1.1/00_变更说明.md)：0.1.2 去 AI 味闸门、数字溯源与真项目复跑记录

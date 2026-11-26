@@ -1,6 +1,6 @@
 {
   "name": "cardo-invest",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Cardo Invest 投资决策流水线：财务参数、匡算与财务评价、三方案比选、建议书成文。",
   "type": "module",
   "main": "index.js",

@@ -1,0 +1,451 @@
+{
+ "schema": "cardo/package-manifest/v1",
+ "package": "CardoInvest",
+ "generatedAt": "2026-11-26",
+ "generator": "交付规范/scripts/build_package_manifest.py",
+ "files": {
+  "SKILL.md": {
+   "bytes": 15704,
+   "sha256": "9eaac1017a5067e6e84bb058490b44d34f20f81c0b12be084b6ed026156e4101"
+  },
+  "开工.py": {
+   "bytes": 59125,
+   "sha256": "90a7c1c73bcd9611163a22f30dfa07a20ad9a47fe8fe437a21b6338086e7c99a"
+  },
+  "开工看板.html": {
+   "bytes": 39790,
+   "sha256": "bb601376a0a0624a1e10ab353183c54cb0063eb8b8444b5f3f9f588791b31bff"
+  },
+  "requirements.txt": {
+   "bytes": 79,
+   "sha256": "505576f57790248797985444f301d8d0a0af34f8149e054bb67f76742c7369d0"
+  },
+  "Skills/00-Cardo投资决策总控/SKILL.md": {
+   "bytes": 8566,
+   "sha256": "6ae9ad4462920c8e6cf3f7776b9f64c553fe654bbbb8973cea476e5f66ed68e8"
+  },
+  "Skills/00-Cardo投资决策总控/scripts/doctor.py": {
+   "bytes": 8135,
+   "sha256": "0756e1ae3fa8bbc5baecccd15f2254026baa79044dc29b4c91e47f9cb3e58a90"
+  },
+  "Skills/00-Cardo投资决策总控/scripts/pipeline.py": {
+   "bytes": 55438,
+   "sha256": "054bd04453fa0514a60792eae940b4f71cb4e0e700997a94628359c5850315e1"
+  },
+  "Skills/01-上游取料/SKILL.md": {
+   "bytes": 7375,
+   "sha256": "4f124315012a861f5075d76e7268059a00e715ea8b18f35c1fc3313f560999c5"
+  },
+  "Skills/01-上游取料/scripts/_lib.py": {
+   "bytes": 11050,
+   "sha256": "cab68eb2b7f619d65db445780395a51bdcaf2085f079dbb83499afe3288b679c"
+  },
+  "Skills/01-上游取料/scripts/collect_inputs.py": {
+   "bytes": 43072,
+   "sha256": "ab144fe3aad15492a018d9a45e174a17790a84ae5436afe628137cc7ebd2d6b6"
+  },
+  "Skills/01-上游取料/scripts/extract_upstream.py": {
+   "bytes": 26376,
+   "sha256": "a56e25ddc0f70ae5976674aef33c2033a5d409bebfe27b7d05fbacb3aed352fd"
+  },
+  "Skills/01-上游取料/scripts/prepare_inputs.py": {
+   "bytes": 66318,
+   "sha256": "cbcbd3ec944c3ac4377c4636a2ae9096ae765e817dccc12af1d536c8eeb54676"
+  },
+  "Skills/01-上游取料/规则/财务口径.yaml": {
+   "bytes": 13997,
+   "sha256": "cc78e2525283b1fba3e87a7efcabce2b5fcd17673aac868838e28ec9baaa9b0b"
+  },
+  "Skills/01b-可研财务提取/SKILL.md": {
+   "bytes": 7796,
+   "sha256": "71aaa70bbc502038d19d0a42c9eb35a1ba731b360e0af91a56ebae989bc57962"
+  },
+  "Skills/01b-可研财务提取/scripts/backfill_projects.py": {
+   "bytes": 13806,
+   "sha256": "f588020a6c8a3909a22cd66fd1ce1daf73165dc437063eec06db0ebbcfaf5a12"
+  },
+  "Skills/01b-可研财务提取/scripts/build_params.py": {
+   "bytes": 28817,
+   "sha256": "9efc7578179213f207be654e4d036ef763bb5f5d0171d71b7288ad72a485fd51"
+  },
+  "Skills/01b-可研财务提取/scripts/catalog.py": {
+   "bytes": 4723,
+   "sha256": "c30e313f350560be43b4aea88ebe4583f911a968dfcc620f9d138153e673c7d8"
+  },
+  "Skills/01b-可研财务提取/scripts/extract_appendix.py": {
+   "bytes": 17283,
+   "sha256": "652e3fccdb05a3b4804a36ca9f3a8d18275e9d0f32765982cd3199a68254dce6"
+  },
+  "Skills/01b-可研财务提取/scripts/extract_feasibility.py": {
+   "bytes": 20859,
+   "sha256": "d10a4c6185e444702d713c83cbb79fd9443fe70a72205dac0901391d73e3c97d"
+  },
+  "Skills/01b-可研财务提取/scripts/extract_tables.py": {
+   "bytes": 17627,
+   "sha256": "7ce6d7b993ae931a4fdef100d306218b44939472787145d2b81a6f46f8283bfa"
+  },
+  "Skills/01b-可研财务提取/scripts/field_hints.py": {
+   "bytes": 5868,
+   "sha256": "562ead19013b91fa4daab1984b477edcf4a42c88b3ed92d1d0a0c44897fcd9ca"
+  },
+  "Skills/01b-可研财务提取/scripts/params_table.py": {
+   "bytes": 10367,
+   "sha256": "341dd164e8524b39ac29891300dbcc913aec6cb1cbb480dbc5cbc7ad15000f16"
+  },
+  "Skills/01b-可研财务提取/scripts/params_writer.py": {
+   "bytes": 11171,
+   "sha256": "e889aed5b1892706a08b2a3f689f2010fb8ce35800cd96d04eb64618b9a13cac"
+  },
+  "Skills/01b-可研财务提取/scripts/pdf_tables.py": {
+   "bytes": 22698,
+   "sha256": "ef1ddb842d7065431a5f47c252af897eabca870a669386fc79eb9e01680a5ecb"
+  },
+  "Skills/02-匡算/SKILL.md": {
+   "bytes": 3471,
+   "sha256": "b885a41e8a4b7c2c201ebe83ffc0f02c3cc38d5dcf285713edd07c1fcfc4c638"
+  },
+  "Skills/02-匡算/scripts/_lib.py": {
+   "bytes": 13014,
+   "sha256": "a80a5dad71f0ef5dabd477b47d3c7a64b4b8d25cab60fe9507ab953ebccc636b"
+  },
+  "Skills/02-匡算/scripts/calc_invest.py": {
+   "bytes": 32918,
+   "sha256": "9cb7a33224e341fae6589bf1c48e6103146b0c1f13ee030fcdc2deeb56dac81e"
+  },
+  "Skills/02-匡算/规则/财务口径.yaml": {
+   "bytes": 13997,
+   "sha256": "cc78e2525283b1fba3e87a7efcabce2b5fcd17673aac868838e28ec9baaa9b0b"
+  },
+  "Skills/03-财务评价/SKILL.md": {
+   "bytes": 3775,
+   "sha256": "f521133045b79606a299dc94ea05a1539e6e16e47ca43a40660774572de6d516"
+  },
+  "Skills/03-财务评价/scripts/_lib.py": {
+   "bytes": 13014,
+   "sha256": "a80a5dad71f0ef5dabd477b47d3c7a64b4b8d25cab60fe9507ab953ebccc636b"
+  },
+  "Skills/03-财务评价/scripts/calc_finance.py": {
+   "bytes": 30587,
+   "sha256": "5dac256cdb2adbc171716fb00280de1b009a7d3374a00e62b9f04e3c9de5b0ba"
+  },
+  "Skills/03-财务评价/scripts/calc_metrics.py": {
+   "bytes": 43621,
+   "sha256": "3181205df58d3f468bc0e87226fcdbf0b4db20dacd1062728744cdb101e1236f"
+  },
+  "Skills/03-财务评价/规则/财务口径.yaml": {
+   "bytes": 13997,
+   "sha256": "cc78e2525283b1fba3e87a7efcabce2b5fcd17673aac868838e28ec9baaa9b0b"
+  },
+  "Skills/04-三方案比选/SKILL.md": {
+   "bytes": 3210,
+   "sha256": "db89ce6fe6fd172cb81dfb85582acecfb98e0f6b0520bfc71a7f6164fcc71f39"
+  },
+  "Skills/04-三方案比选/scripts/_lib.py": {
+   "bytes": 13014,
+   "sha256": "a80a5dad71f0ef5dabd477b47d3c7a64b4b8d25cab60fe9507ab953ebccc636b"
+  },
+  "Skills/04-三方案比选/scripts/calc_metrics.py": {
+   "bytes": 35630,
+   "sha256": "e35b614b1f25fbcd42b361d918e0cf758d9189d3760557597be96b119e8345ae"
+  },
+  "Skills/04-三方案比选/scripts/gen_schemes.py": {
+   "bytes": 34023,
+   "sha256": "04502e5af443f7f17fdc4dbe3fa114f6b3ef783cfae367f0ebce7d9fae3d77e0"
+  },
+  "Skills/04-三方案比选/规则/方案参数表.yaml": {
+   "bytes": 1321,
+   "sha256": "198bdf1bb31c8908956c64ee1551a980e6238c8b377a1655a31f247fb26e50fd"
+  },
+  "Skills/04-三方案比选/规则/财务口径.yaml": {
+   "bytes": 13997,
+   "sha256": "cc78e2525283b1fba3e87a7efcabce2b5fcd17673aac868838e28ec9baaa9b0b"
+  },
+  "Skills/05-01-项目概述/SKILL.md": {
+   "bytes": 2157,
+   "sha256": "ad535d9e136916f61c0c30b5d8bf530f3e62f4c58fef61e86eaba0d9aa42ad86"
+  },
+  "Skills/05-01-项目概述/规则/章节契约.yaml": {
+   "bytes": 12801,
+   "sha256": "41710d165069d9d1aceada06c3c4ea46747a5b54c0340b40668f929abaa0b3d8"
+  },
+  "Skills/05-02-项目背景与建设必要性/SKILL.md": {
+   "bytes": 2206,
+   "sha256": "4b5aa62e0bb398d3308c0f5de8abac92b1b691343a51d1d969955a8ac13fcc94"
+  },
+  "Skills/05-02-项目背景与建设必要性/规则/章节契约.yaml": {
+   "bytes": 12198,
+   "sha256": "5b15c39374c8010e9cead665824d947b3fd59e58f6c6579287375e29f081802f"
+  },
+  "Skills/05-03-现状调研分析/SKILL.md": {
+   "bytes": 2531,
+   "sha256": "5179e7f6759997e600cec982a41694e945793d1f02a9e0c46bd1125902ea48ae"
+  },
+  "Skills/05-03-现状调研分析/规则/章节契约.yaml": {
+   "bytes": 7707,
+   "sha256": "3229251b226bee7476f888edefb781fd9363283c49ddd26a0a0d48d7ad18a892"
+  },
+  "Skills/05-04-市场分析与功能定位/SKILL.md": {
+   "bytes": 2237,
+   "sha256": "a73a544667b8f9900d9b03ef8bb3732a5b3a89bc3868bcc3de2ac2158d1b4416"
+  },
+  "Skills/05-04-市场分析与功能定位/规则/章节契约.yaml": {
+   "bytes": 11425,
+   "sha256": "803faf81e1e8882f9ae30823610217f53ab9ecedc71ad0e2f06c40649dffe742"
+  },
+  "Skills/05-05-项目建设范围、改造内容与建设方案/SKILL.md": {
+   "bytes": 2310,
+   "sha256": "4b446b5ddeecdc246690c76cf2b2dbb754dbdbbfeb22ca33ffea10d16c59c613"
+  },
+  "Skills/05-05-项目建设范围、改造内容与建设方案/规则/章节契约.yaml": {
+   "bytes": 11827,
+   "sha256": "2b4846b1b3c4d6ae8231246f987fede04612a00ea37c6c40b6f5a317461fe300"
+  },
+  "Skills/05-06-组织架构与运营模式/SKILL.md": {
+   "bytes": 2161,
+   "sha256": "0f18fff3f969cbdbb6af8f3edade7a00ebf0ed5eaa17545e270346334cb691ec"
+  },
+  "Skills/05-06-组织架构与运营模式/规则/章节契约.yaml": {
+   "bytes": 8952,
+   "sha256": "0c9434943e97c9b3b64d0f43a2ce56ee9d3c7208ceef743665f38b4b02c77c84"
+  },
+  "Skills/05-07-投资估算与资金筹措方案/SKILL.md": {
+   "bytes": 2240,
+   "sha256": "e6e51448684909f447cff73ebfcc98581c4b42bfa10f9e45c9cc36e3b7a02ced"
+  },
+  "Skills/05-07-投资估算与资金筹措方案/规则/章节契约.yaml": {
+   "bytes": 8976,
+   "sha256": "d72853b29601a89ac0137320fa72b6581e956407f75440515663bcc862c25558"
+  },
+  "Skills/05-08-财务评价/SKILL.md": {
+   "bytes": 2335,
+   "sha256": "ce2a960088404fee523cfa82cc167d1e7f0633315b664944fbe883724f0837d0"
+  },
+  "Skills/05-08-财务评价/规则/章节契约.yaml": {
+   "bytes": 25525,
+   "sha256": "886d83332d1212ae516da5203856797f550864932169fe4b857e64c567819459"
+  },
+  "Skills/05-09-基于AHP层次分析法的投资决策指标体系量化分析/SKILL.md": {
+   "bytes": 2468,
+   "sha256": "cdb35e8b4e9f9530cd8ffa251e0052ee49c399f69d1301965ffc7263644ffb97"
+  },
+  "Skills/05-09-基于AHP层次分析法的投资决策指标体系量化分析/规则/章节契约.yaml": {
+   "bytes": 19255,
+   "sha256": "0f2a46cb76bbb4ba7f4b3731e5aa9777eb4a05d73636ca6df8c66b430090ddee"
+  },
+  "Skills/05-10-附件清单/SKILL.md": {
+   "bytes": 2079,
+   "sha256": "567c7c4ff9d5b716525b150f0b73782d3780fc356e267d706c029d4c247f24c1"
+  },
+  "Skills/05-10-附件清单/规则/章节契约.yaml": {
+   "bytes": 6421,
+   "sha256": "474bf2bfc5e046e64efe719d27250b682c8d0d4d6be7fd03ddbfb4bc85aebd85"
+  },
+  "Skills/05-章节成文/SKILL.md": {
+   "bytes": 6739,
+   "sha256": "24110b1fdbe4ffe21ea1da5b7efe0c87d0d1f0f179779b595348c78c69ec2220"
+  },
+  "Skills/05-章节成文/scripts/_lib.py": {
+   "bytes": 12393,
+   "sha256": "c24332c768151b570c0560f92648bda56fb10090a03b45f25100ea2afa742381"
+  },
+  "Skills/05-章节成文/scripts/assemble_chapters.py": {
+   "bytes": 254654,
+   "sha256": "5b7cbe641ef024ce5c8597768255e6c47f320d1a8f8468bf83354e6c3cb370d4"
+  },
+  "Skills/05-章节成文/scripts/basis_library.py": {
+   "bytes": 13510,
+   "sha256": "29e59e7927be297aa64fb96bb63c9b55861f74a58e23f7553758fdc9d41711f4"
+  },
+  "Skills/05-章节成文/scripts/build_evidence_register.py": {
+   "bytes": 36593,
+   "sha256": "ba255169220951541388f2eea21855bc6d09612ec43753aacce7724c8ba99b4b"
+  },
+  "Skills/05-章节成文/scripts/build_write_tasks.py": {
+   "bytes": 28774,
+   "sha256": "4971abaf69707ad5bcaf901474b638191979b58da94a685f3f9f83757768aa30"
+  },
+  "Skills/05-章节成文/scripts/check_banned.py": {
+   "bytes": 6388,
+   "sha256": "00dbf6ecdd7cdd26ae0df6c7e2be7676fe1ce9b949582d9216dc9b48fd97fe09"
+  },
+  "Skills/05-章节成文/scripts/check_chapter.py": {
+   "bytes": 2813,
+   "sha256": "674bfeadb3e8ba46f2903ffe1952effeb22f8608626133278af3a5d734ab38b1"
+  },
+  "Skills/05-章节成文/scripts/check_crossnum.py": {
+   "bytes": 9454,
+   "sha256": "cfaf1303720fc1266c324fee98710be88475ef4841eef6a0e2d8eefae64d2833"
+  },
+  "Skills/05-章节成文/scripts/check_keyq.py": {
+   "bytes": 11017,
+   "sha256": "75e9adca7bee2414a2861999bf0784ea0bb8f0031b988a106691003cf4589818"
+  },
+  "Skills/05-章节成文/规则/写作规范.yaml": {
+   "bytes": 36540,
+   "sha256": "4b36ed16a8a6e5c3b8cde0bc0ea75289418b8c6cf07074ea3c8306a4fd701415"
+  },
+  "Skills/05-章节成文/规则/章节契约.yaml": {
+   "bytes": 130389,
+   "sha256": "9a568f38636fd7f1e6c73b32cf9741f785a3a5005d2fad820e2efbf1a6e8ddc9"
+  },
+  "Skills/05-章节成文/规则/财务口径.yaml": {
+   "bytes": 13997,
+   "sha256": "cc78e2525283b1fba3e87a7efcabce2b5fcd17673aac868838e28ec9baaa9b0b"
+  },
+  "Skills/06-渲染docx/SKILL.md": {
+   "bytes": 4445,
+   "sha256": "7f626131b56208791ec041a83d54838e391a5640538a831ee308149c44476dc8"
+  },
+  "Skills/06-渲染docx/scripts/_lib.py": {
+   "bytes": 11050,
+   "sha256": "cab68eb2b7f619d65db445780395a51bdcaf2085f079dbb83499afe3288b679c"
+  },
+  "Skills/06-渲染docx/scripts/build_evidence_xlsx.py": {
+   "bytes": 16492,
+   "sha256": "4948104cd9d23877ccd7cbdb90fd1e94a1461ae4dd1765005701bcdb7b76679f"
+  },
+  "Skills/06-渲染docx/scripts/build_invest_docx.py": {
+   "bytes": 54068,
+   "sha256": "bb2f4a632bb2d0d45260ca8acab5502df738dd66bea32534775444561bf948cb"
+  },
+  "Skills/06-渲染docx/scripts/figures.py": {
+   "bytes": 22268,
+   "sha256": "9cb3fed58f455bd081db521456152e7cdb14a4a69ef5c39d04bfea508aeae93a"
+  },
+  "Skills/06-渲染docx/规则/表格契约.yaml": {
+   "bytes": 7644,
+   "sha256": "a7e70f9e8a42e0035e77c98c3aa6f0ef50860b6fca08649c721b0c54905e3ad5"
+  },
+  "Skills/07-回读自检/SKILL.md": {
+   "bytes": 2964,
+   "sha256": "7a2c08335ee2c0d721cc1383cf4b0cc216f8ca8996e412d63389585651950cd4"
+  },
+  "Skills/07-回读自检/scripts/_lib.py": {
+   "bytes": 15684,
+   "sha256": "2c4c5a38c571f69bd29d25f31c787a1c300be7ad6552be22fabab98764cee778"
+  },
+  "Skills/07-回读自检/scripts/check_evidence.py": {
+   "bytes": 49357,
+   "sha256": "240457c81c4969a4ca4b244853b5c1feff1677c19fa1955ef7b254a1c99aeb89"
+  },
+  "Skills/07-回读自检/scripts/check_invest.py": {
+   "bytes": 63705,
+   "sha256": "d86a8f661908e02bfa0a6cac8f3fba390565e60713c16cf172d6dfdcb2c5ec42"
+  },
+  "Skills/07-回读自检/规则/章节契约.yaml": {
+   "bytes": 130254,
+   "sha256": "1ebacfc523845b71ae105500841481110026821d421f11b3c9a4fa73dba75876"
+  },
+  "Skills/07-回读自检/规则/表格契约.yaml": {
+   "bytes": 7656,
+   "sha256": "16c72718c1024edee1bcd4b1a74053e3b287eb5479848d415f2c4c217bc28950"
+  },
+  "Skills/07-回读自检/规则/财务口径.yaml": {
+   "bytes": 13997,
+   "sha256": "cc78e2525283b1fba3e87a7efcabce2b5fcd17673aac868838e28ec9baaa9b0b"
+  },
+  "Skills/08-验证与边界/SKILL.md": {
+   "bytes": 7089,
+   "sha256": "bb6b565b681c117b945c7d03b4b4cb3dc7b25667161ab88056f10e4b3c6d41b4"
+  },
+  "Skills/08-验证与边界/scripts/deai_gate.py": {
+   "bytes": 2005,
+   "sha256": "1972b75aa5be34e187b433297131e2da4baaf1bd4a80d9f9aa0f7c8ae9343ce9"
+  },
+  "Skills/08-验证与边界/scripts/deai_scan.py": {
+   "bytes": 29012,
+   "sha256": "f837e59aa9127295d8ceb65359a39fb8d1666df2a3d94289ef4c80c956c58a3a"
+  },
+  "Skills/08-验证与边界/scripts/export_office.py": {
+   "bytes": 114356,
+   "sha256": "970cbd058ea576dbcd31872c204d82b910fadbb829b6f4d954ba7c071ae3abc0"
+  },
+  "Skills/08-验证与边界/scripts/export_trace_sample.py": {
+   "bytes": 5124,
+   "sha256": "dd75294f48edd21974241888e3c16070b807b162645ab8e4626a9f80b21f39c7"
+  },
+  "Skills/08-验证与边界/scripts/final_gates.py": {
+   "bytes": 14354,
+   "sha256": "235e0361316f1b1f7f29e14d51433f240b74c85517c08bb454ec9aa70e007e73"
+  },
+  "Skills/08-验证与边界/scripts/independent_verify.py": {
+   "bytes": 74499,
+   "sha256": "7c111a46285fe22b90360a43cd1c80f9dd8bb8029abf9e4c7292d0ac81f583d5"
+  },
+  "Skills/08-验证与边界/scripts/render_pdf.py": {
+   "bytes": 14752,
+   "sha256": "4a1f1ac82b9366fbe282ee5f69155dec08e91cc6fb76eb9b0c9477a40300436e"
+  },
+  "Skills/08-验证与边界/规则/验证口径.yaml": {
+   "bytes": 1860,
+   "sha256": "ca61dee46b35561083058e3cfc5eb5c43e2ee0cd888b66cc83e08c6dbacd2d5c"
+  },
+  "assets/inputs/槽位-空白.xlsx": {
+   "bytes": 6039,
+   "sha256": "61bf7c83b12132bbe4f9676e88495744a9fe0dc5a56cf166d8242a0921b23ef8"
+  },
+  "assets/inputs/财务参数-空白.xlsx": {
+   "bytes": 13157,
+   "sha256": "12f0e2739b35edea9ef4fe15638e2db124615e14ca24caab6b78d4ca95502de4"
+  },
+  "assets/templates/2 城市更新老旧街区改造项目投资决策建议书（模板）-补充数据来源（包含三类项目）.docx": {
+   "bytes": 44282,
+   "sha256": "f8f97d8bcd317007d2d76e1871f319797fe7b8e297ee7a48365bb5dfafce7b10"
+  },
+  "assets/依据库/00_说明.md": {
+   "bytes": 1929,
+   "sha256": "4570a1685739a59140bad20e75b6c0c216516ee130accb660cbf1a97c37caa9d"
+  },
+  "assets/依据库/依据库.json": {
+   "bytes": 41519,
+   "sha256": "f53e786050bf40af202f0166021c31d5710fb0e64e80610e2a7539c5409edfa1"
+  },
+  "assets/依据库/依据库.md": {
+   "bytes": 25140,
+   "sha256": "f8f2640fe8f555251210bbdf0357f92a8eaca3c9c1de5e13f20c98f3411277dd"
+  },
+  "assets/依据库/核验任务.json": {
+   "bytes": 16657,
+   "sha256": "ac46d734acc4327c8d62497644aca57d13eb4e4239584aa9e36753e1955125b5"
+  },
+  "assets/依据库/核验记录.md": {
+   "bytes": 17160,
+   "sha256": "73a1bc06cc99a7d741166e8a25f004c092d601e1dc7e4fa822398727157449fc"
+  },
+  "assets/依据库/运行时联网核验规范.md": {
+   "bytes": 10635,
+   "sha256": "6b52df3d41bc85c52ab1ccd1dd9e7c43b8668f0259dcc005f169ede96747e31c"
+  }
+ },
+ "runtimePython": {
+  "rel": "runtime/python/python.exe",
+  "present": true,
+  "bytes": 105816
+ },
+ "runtimeDeps": {
+  "python-docx": {
+   "dir": "docx",
+   "present": true,
+   "files": 119,
+   "sha256": "8716e0a108d00591945d39f6cece03a97070a94a0b1b3b51a85939849bbef85d"
+  },
+  "openpyxl": {
+   "dir": "openpyxl",
+   "present": true,
+   "files": 190,
+   "sha256": "4ebfea75cf1ea23689699747bd3886499905f0fc904bc5792de731da2c5d34ab"
+  },
+  "PyMuPDF": {
+   "dir": "pymupdf",
+   "present": true,
+   "files": 172,
+   "sha256": "196b6c87be220bc96f1d58b53a4988a7ef75a033140468ba5b7363e6b556e335"
+  },
+  "numpy": {
+   "dir": "numpy",
+   "present": true,
+   "files": 921,
+   "sha256": "0e0311453f3bb176f2e2a81098774fe79978ea5e2a1554c262c5af8cc38d538c"
+  }
+ }
+}
